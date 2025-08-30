@@ -124,7 +124,19 @@
 
             <!-- Ürün Yönetim Bölümü -->
             <div id="adminProductsSection" style="display: none;">
-                <h2 class="text-xl font-semibold text-gray-700 mb-4">Tüm Ürünler</h2>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-700">Tüm Ürünler</h2>
+                    <div class="flex items-center space-x-2">
+                        <label for="admin-sort-select" class="text-sm font-medium text-gray-600">Sırala:</label>
+                        <select id="admin-sort-select" class="p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="default">Varsayılan</option>
+                            <option value="name-asc">İsme Göre (A-Z)</option>
+                            <option value="name-desc">İsme Göre (Z-A)</option>
+                            <option value="price-asc">Fiyata Göre (Artan)</option>
+                            <option value="price-desc">Fiyata Göre (Azalan)</option>
+                        </select>
+                    </div>
+                </div>
                 <div id="adminProductList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <!-- Ürünler buraya JavaScript ile dinamik olarak eklenecek -->
                 </div>
@@ -287,7 +299,8 @@
             products: [...DEFAULT_PRODUCTS],
             orders: [], 
             currentUser: null,
-            sortKey: 'default'
+            sortKey: 'default',
+            adminSortKey: 'default'
         };
 
         // Veriyi localStorage'a kaydetme
@@ -342,6 +355,7 @@
         const logoutBtnAdmin = document.getElementById('logoutBtnAdmin');
         const adminPanelBtn = document.getElementById('adminPanelBtn');
         const homeBtnAdmin = document.getElementById('homeBtnAdmin');
+        const adminSortSelect = document.getElementById('admin-sort-select');
 
         const adminOrdersSection = document.getElementById('adminOrdersSection');
         const adminProductsSection = document.getElementById('adminProductsSection');
@@ -414,15 +428,17 @@
             productList.innerHTML = '';
             sortedProducts.forEach(product => {
                 const productItem = document.createElement('div');
-                productItem.className = 'bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300';
+                productItem.className = 'bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 relative';
                 productItem.innerHTML = `
+                    <div class="absolute bottom-12 left-2 text-xs font-semibold text-indigo-700 bg-indigo-100 px-2 py-1 rounded-full shadow-inner z-10">
+                        ${product.code}
+                    </div>
                     <div class="relative w-full h-32 overflow-hidden rounded-lg mb-3">
                         <img src="${product.imageUrl}" onerror="this.onerror=null; this.src='https://placehold.co/400x300/ccc/fff?text=Resim+Yok';" alt="${product.name}" 
                             class="w-full h-full object-cover rounded-lg cursor-pointer" 
                             data-large-url="${product.imageUrl}">
                     </div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-1">${product.name}</h3>
-                    <p class="text-xs text-gray-500 mb-1">Ürün Kodu: ${product.code}</p>
                     <p class="text-xs text-gray-500 mb-1">Kutu İçi: ${product.boxQuantity} adet</p>
                     <p class="text-md font-bold text-gray-900 mb-2">${product.price.toFixed(2)} €</p>
                     <div class="flex flex-col space-y-2">
@@ -508,14 +524,14 @@
         }
         
         // Admin ürün listesini render etme
-        function renderAdminProducts() {
+        function renderAdminProducts(sortedProducts = state.products) {
             adminProductList.innerHTML = '';
-            if (state.products.length === 0) {
+            if (sortedProducts.length === 0) {
                 adminProductList.innerHTML = '<p class="text-center text-gray-500 mt-4">Henüz ürün eklenmedi.</p>';
                 return;
             }
             
-            state.products.forEach(product => {
+            sortedProducts.forEach(product => {
                 const productDiv = document.createElement('div');
                 productDiv.className = 'bg-gray-100 p-4 rounded-lg shadow-inner flex flex-col items-center text-center';
                 productDiv.innerHTML = `
@@ -533,6 +549,31 @@
             });
         }
         
+        // Admin ürünleri sıralama
+        function sortAdminProducts(sortBy) {
+            let sortedProducts = [...state.products];
+            switch (sortBy) {
+                case 'name-asc':
+                    sortedProducts.sort((a, b) => a.name.localeCompare(b.name, 'tr', { sensitivity: 'base' }));
+                    break;
+                case 'name-desc':
+                    sortedProducts.sort((a, b) => b.name.localeCompare(a.name, 'tr', { sensitivity: 'base' }));
+                    break;
+                case 'price-asc':
+                    sortedProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    sortedProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'default':
+                default:
+                    sortedProducts = state.products;
+                    break;
+            }
+            state.adminSortKey = sortBy;
+            renderAdminProducts(sortedProducts);
+        }
+
         // Excel'e aktarma fonksiyonu
         function exportToExcel(order) {
             const header = "Siparis No,Kullanici,Urun Adi,Siparis Adedi,Birim Fiyat (€),Urun Toplam (€)\n";
@@ -657,7 +698,7 @@
             } else {
                 viewProductsBtn.classList.remove('bg-gray-200', 'text-gray-800');
                 viewProductsBtn.classList.add('bg-indigo-600', 'text-white');
-                renderAdminProducts();
+                renderAdminProducts(state.products);
             }
         }
         
@@ -707,6 +748,10 @@
 
         viewProductsBtn.addEventListener('click', () => {
             showAdminSection('products');
+        });
+
+        adminSortSelect.addEventListener('change', (e) => {
+            sortAdminProducts(e.target.value);
         });
 
         createUserBtn.addEventListener('click', () => {
@@ -840,7 +885,7 @@
                     if (productIndex !== -1) {
                         state.products.splice(productIndex, 1);
                         saveData();
-                        renderAdminProducts();
+                        renderAdminProducts(state.products);
                         renderProducts();
                         closeModal('confirmModal');
                         openModal('successModal');
@@ -887,7 +932,7 @@
                         updatedProduct.imageUrl = e.target.result;
                         saveData();
                         closeModal('editProductModal');
-                        renderAdminProducts();
+                        renderAdminProducts(state.products);
                         renderProducts();
                         openModal('successModal');
                         document.getElementById('successModalMessage').textContent = 'Ürün başarıyla güncellendi!';
@@ -896,7 +941,7 @@
                 } else {
                     saveData();
                     closeModal('editProductModal');
-                    renderAdminProducts();
+                    renderAdminProducts(state.products);
                     renderProducts();
                     openModal('successModal');
                     document.getElementById('successModalMessage').textContent = 'Ürün başarıyla güncellendi!';
