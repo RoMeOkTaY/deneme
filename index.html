@@ -186,6 +186,10 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Yeni Ürün Ekle</h2>
             <form id="addProductForm" class="space-y-4">
                 <div>
+                    <label for="newProductCode" class="block text-gray-700 font-medium mb-1">Ürün Kodu</label>
+                    <input type="text" id="newProductCode" name="code" placeholder="Ürün Kodu" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div>
                     <label for="newProductName" class="block text-gray-700 font-medium mb-1">Ürün Adı</label>
                     <input type="text" id="newProductName" name="name" placeholder="Ürün Adı" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                 </div>
@@ -215,6 +219,10 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Ürünü Düzenle</h2>
             <form id="editProductForm" class="space-y-4">
                 <input type="hidden" id="editProductId">
+                <div>
+                    <label for="editProductCode" class="block text-gray-700 font-medium mb-1">Ürün Kodu</label>
+                    <input type="text" id="editProductCode" name="code" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
                 <div>
                     <label for="editProductName" class="block text-gray-700 font-medium mb-1">Ürün Adı</label>
                     <input type="text" id="editProductName" name="name" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
@@ -260,18 +268,18 @@
             'deneme': { username: 'deneme', password: '123', role: 'user' },
         };
         const DEFAULT_PRODUCTS = [
-            { id: 1, name: "Zeytinyağı (5L)", imageUrl: "https://placehold.co/400x300/a3e635/000?text=Zeytinyağı", price: 25.00, sales: 150, boxQuantity: 1 },
-            { id: 2, name: "Un (25kg)", imageUrl: "https://placehold.co/400x300/fde047/000?text=Un", price: 12.50, sales: 200, boxQuantity: 1 },
-            { id: 3, name: "Tuz (5kg)", imageUrl: "https://placehold.co/400x300/6ee7b7/000?text=Tuz", price: 3.75, sales: 500, boxQuantity: 10 },
-            { id: 4, name: "Şeker (50kg)", imageUrl: "https://placehold.co/400x300/d8b4fe/000?text=Şeker", price: 65.00, sales: 80, boxQuantity: 1 },
-            { id: 5, name: "Pirinç (10kg)", imageUrl: "https://placehold.co/400x300/94a3b8/000?text=Pirinç", price: 9.20, sales: 300, boxQuantity: 5 },
-            { id: 6, name: "Ayçiçek Yağı (18L)", imageUrl: "https://placehold.co/400x300/fca5a5/000?text=Ayçiçek+Yağı", price: 32.00, sales: 250, boxQuantity: 1 },
-            { id: 7, name: "Domates Salçası (5kg)", imageUrl: "https://placehold.co/400x300/fb923c/000?text=Domates+Salçası", price: 18.50, sales: 180, boxQuantity: 1 },
-            { id: 8, name: "Makarna (500g)", imageUrl: "https://placehold.co/400x300/c4b5fd/000?text=Makarna", price: 1.25, sales: 450, boxQuantity: 24 },
-            { id: 9, name: "Kuru Fasulye (1kg)", imageUrl: "https://placehold.co/400x300/a78bfa/000?text=Fasulye", price: 4.50, sales: 350, boxQuantity: 12 },
-            { id: 10, name: "Siyah Zeytin (1kg)", imageUrl: "https://placehold.co/400x300/22c55e/000?text=Siyah+Zeytin", price: 7.50, sales: 220, boxQuantity: 12 },
-            { id: 11, name: "Nohut (1kg)", imageUrl: "https://placehold.co/400x300/3b82f6/000?text=Nohut", price: 5.50, sales: 280, boxQuantity: 12 },
-            { id: 12, name: "Mercimek (1kg)", imageUrl: "https://placehold.co/400x300/ef4444/000?text=Mercimek", price: 4.00, sales: 310, boxQuantity: 12 },
+            { id: 1, code: "ZYT-01", name: "Zeytinyağı (5L)", imageUrl: "https://placehold.co/400x300/a3e635/000?text=Zeytinyağı", price: 25.00, sales: 150, boxQuantity: 1 },
+            { id: 2, code: "UN-02", name: "Un (25kg)", imageUrl: "https://placehold.co/400x300/fde047/000?text=Un", price: 12.50, sales: 200, boxQuantity: 1 },
+            { id: 3, code: "TZ-03", name: "Tuz (5kg)", imageUrl: "https://placehold.co/400x300/6ee7b7/000?text=Tuz", price: 3.75, sales: 500, boxQuantity: 10 },
+            { id: 4, code: "SKR-04", name: "Şeker (50kg)", imageUrl: "https://placehold.co/400x300/d8b4fe/000?text=Şeker", price: 65.00, sales: 80, boxQuantity: 1 },
+            { id: 5, code: "PRNC-05", name: "Pirinç (10kg)", imageUrl: "https://placehold.co/400x300/94a3b8/000?text=Pirinç", price: 9.20, sales: 300, boxQuantity: 5 },
+            { id: 6, code: "AYCG-06", name: "Ayçiçek Yağı (18L)", imageUrl: "https://placehold.co/400x300/fca5a5/000?text=Ayçiçek+Yağı", price: 32.00, sales: 250, boxQuantity: 1 },
+            { id: 7, code: "DMT-07", name: "Domates Salçası (5kg)", imageUrl: "https://placehold.co/400x300/fb923c/000?text=Domates+Salçası", price: 18.50, sales: 180, boxQuantity: 1 },
+            { id: 8, code: "MKN-08", name: "Makarna (500g)", imageUrl: "https://placehold.co/400x300/c4b5fd/000?text=Makarna", price: 1.25, sales: 450, boxQuantity: 24 },
+            { id: 9, code: "KRF-09", name: "Kuru Fasulye (1kg)", imageUrl: "https://placehold.co/400x300/a78bfa/000?text=Fasulye", price: 4.50, sales: 350, boxQuantity: 12 },
+            { id: 10, code: "SZ-10", name: "Siyah Zeytin (1kg)", imageUrl: "https://placehold.co/400x300/22c55e/000?text=Siyah+Zeytin", price: 7.50, sales: 220, boxQuantity: 12 },
+            { id: 11, code: "NHT-11", name: "Nohut (1kg)", imageUrl: "https://placehold.co/400x300/3b82f6/000?text=Nohut", price: 5.50, sales: 280, boxQuantity: 12 },
+            { id: 12, code: "MRC-12", name: "Mercimek (1kg)", imageUrl: "https://placehold.co/400x300/ef4444/000?text=Mercimek", price: 4.00, sales: 310, boxQuantity: 12 },
         ];
         
         let users = { ...DEFAULT_USERS };
@@ -365,6 +373,7 @@
         const editProductForm = document.getElementById('editProductForm');
         const cancelEditProductBtn = document.getElementById('cancelEditProductBtn');
         const editProductIdInput = document.getElementById('editProductId');
+        const editProductCodeInput = document.getElementById('editProductCode');
         const editProductNameInput = document.getElementById('editProductName');
         const editProductPriceInput = document.getElementById('editProductPrice');
         const editProductBoxQuantityInput = document.getElementById('editProductBoxQuantity');
@@ -413,6 +422,7 @@
                             data-large-url="${product.imageUrl}">
                     </div>
                     <h3 class="text-sm font-semibold text-gray-700 mb-1">${product.name}</h3>
+                    <p class="text-xs text-gray-500 mb-1">Ürün Kodu: ${product.code}</p>
                     <p class="text-xs text-gray-500 mb-1">Kutu İçi: ${product.boxQuantity} adet</p>
                     <p class="text-md font-bold text-gray-900 mb-2">${product.price.toFixed(2)} €</p>
                     <div class="flex flex-col space-y-2">
@@ -511,6 +521,7 @@
                 productDiv.innerHTML = `
                     <img src="${product.imageUrl}" alt="${product.name}" class="w-24 h-24 object-cover rounded-md mb-2">
                     <h4 class="font-semibold text-gray-800">${product.name}</h4>
+                    <p class="text-sm text-gray-600">Ürün Kodu: ${product.code}</p>
                     <p class="text-sm text-gray-600">${product.price.toFixed(2)} € / adet</p>
                     <p class="text-xs text-gray-500">Kutu İçi: ${product.boxQuantity} adet</p>
                     <div class="flex space-x-2 mt-4">
@@ -718,10 +729,17 @@
 
         addProductForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            const code = document.getElementById('newProductCode').value;
             const name = document.getElementById('newProductName').value;
             const price = parseFloat(document.getElementById('newProductPrice').value);
             const boxQuantity = parseInt(document.getElementById('newProductBoxQuantity').value, 10);
             const imageFile = document.getElementById('newProductImageFile').files[0];
+
+            if (state.products.find(p => p.code === code)) {
+                 openModal('errorModal');
+                 document.getElementById('errorMessage').textContent = 'Bu ürün kodu zaten mevcut.';
+                 return;
+            }
 
             if (isNaN(price) || price <= 0) {
                 openModal('errorModal');
@@ -738,6 +756,7 @@
             reader.onload = function(e) {
                 const newProduct = {
                     id: Date.now(), 
+                    code: code,
                     name: name,
                     imageUrl: e.target.result, 
                     price: price,
@@ -831,6 +850,7 @@
             } else if (button.classList.contains('edit-product-btn')) {
                 const productToEdit = state.products[productIndex];
                 editProductIdInput.value = productToEdit.id;
+                editProductCodeInput.value = productToEdit.code;
                 editProductNameInput.value = productToEdit.name;
                 editProductPriceInput.value = productToEdit.price;
                 editProductBoxQuantityInput.value = productToEdit.boxQuantity;
@@ -846,6 +866,16 @@
             
             if (productIndex !== -1) {
                 const updatedProduct = state.products[productIndex];
+                const newCode = editProductCodeInput.value;
+                
+                const codeExists = state.products.some((p, idx) => p.code === newCode && idx !== productIndex);
+                if (codeExists) {
+                    openModal('errorModal');
+                    document.getElementById('errorMessage').textContent = 'Bu ürün kodu zaten mevcut. Lütfen başka bir kod girin.';
+                    return;
+                }
+                
+                updatedProduct.code = newCode;
                 updatedProduct.name = editProductNameInput.value;
                 updatedProduct.price = parseFloat(editProductPriceInput.value);
                 updatedProduct.boxQuantity = parseInt(editProductBoxQuantityInput.value, 10);
