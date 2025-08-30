@@ -1,920 +1,910 @@
-{\rtf1\ansi\ansicpg1254\cocoartf2822
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
-{\colortbl;\red255\green255\blue255;\red109\green109\blue109;\red236\green241\blue247;}
-{\*\expandedcolortbl;;\cssrgb\c50196\c50196\c50196;\cssrgb\c94118\c95686\c97647;}
-\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\deftab720
-\pard\pardeftab720\partightenfactor0
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gıda Dağıtım Sistemi - Alt Bayi Sipariş</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-image {
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 antialiased">
 
-\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 <!DOCTYPE html>\
-<html lang="tr">\
-<head>\
-    <meta charset="UTF-8">\
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
-    <title>G\uc0\u305 da Da\u287 \u305 t\u305 m Sistemi - Alt Bayi Sipari\u351 </title>\
-    <script src="https://cdn.tailwindcss.com"></script>\
-    <style>\
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');\
-        body \{\
-            font-family: 'Inter', sans-serif;\
-            background-color: #f3f4f6;\
-        \}\
-        .modal \{\
-            transition: opacity 0.3s ease, visibility 0.3s ease;\
-        \}\
-        .modal.is-visible \{\
-            opacity: 1;\
-            visibility: visible;\
-        \}\
-        .modal-image \{\
-            max-width: 90vw;\
-            max-height: 90vh;\
-        \}\
-        body.modal-open \{\
-            overflow: hidden;\
-        \}\
-    </style>\
-</head>\
-<body class="bg-gray-100 antialiased">\
-\
-    <!-- Giri\uc0\u351  B\'f6l\'fcm\'fc -->\
-    <div id="loginSection" class="container mx-auto px-4 py-8 max-w-lg">\
-        <div class="bg-white p-8 rounded-xl shadow-lg text-center">\
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Giri\uc0\u351  Yap</h1>\
-            \
-            <form id="loginForm" class="space-y-4">\
-                <input type="text" id="loginUsername" name="username" placeholder="Kullan\uc0\u305 c\u305  Ad\u305 " class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                <input type="password" id="loginPassword" name="password" placeholder="\uc0\u350 ifre" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-full hover:bg-indigo-700 transition duration-300">Giri\uc0\u351  Yap</button>\
-            </form>\
-        </div>\
-    </div>\
-    \
-    <!-- Ana Uygulama B\'f6l\'fcm\'fc (Kullan\uc0\u305 c\u305  Paneli) -->\
-    <div id="appSection" class="container mx-auto px-4 py-8" style="display: none;">\
-        <div class="bg-white p-6 md:p-10 rounded-xl shadow-lg">\
-            <div class="flex justify-between items-center mb-6">\
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Alt Bayi Sipari\uc0\u351  Ekran\u305 </h1>\
-                <div class="flex items-center space-x-4">\
-                    <button id="adminPanelBtn" style="display: none;" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded-full text-sm hover:bg-indigo-600 transition duration-300">\
-                        Y\'f6netim Paneli\
-                    </button>\
-                    <p id="userWelcome" class="text-sm font-medium text-gray-600"></p>\
-                    <button id="logoutBtn" class="text-sm text-red-600 hover:underline">\'c7\uc0\u305 k\u305 \u351  Yap</button>\
-                </div>\
-            </div>\
-            <p class="text-center text-gray-500 mb-8">\'dcr\'fcn listesinden sipari\uc0\u351 inizi olu\u351 turabilirsiniz.</p>\
-            <div class="flex justify-end items-center mb-4">\
-                <div class="flex items-center space-x-2">\
-                    <label for="sort-select" class="text-sm font-medium text-gray-600">S\uc0\u305 rala:</label>\
-                    <select id="sort-select" class="p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">\
-                        <option value="default">Varsay\uc0\u305 lan</option>\
-                        <option value="price-asc">Fiyata G\'f6re (Artan)</option>\
-                        <option value="price-desc">Fiyata G\'f6re (Azalan)</option>\
-                        <option value="sales-desc">\'c7ok Satana G\'f6re</option>\
-                    </select>\
-                </div>\
-                <div class="bg-indigo-100 text-indigo-800 font-semibold py-2 px-4 rounded-lg shadow-inner ml-4">\
-                    <span class="text-sm">Genel Toplam:</span>\
-                    <span id="grandTotal" class="text-lg">0.00 \'80</span>\
-                </div>\
-            </div>\
-            <div id="productList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">\
-                <!-- \'dcr\'fcnler buraya JavaScript ile dinamik olarak eklenecek -->\
-            </div>\
-            <div class="mt-10 text-center">\
-                <button id="sendOrderBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">\
-                    Sipari\uc0\u351 i Olu\u351 tur ve G\'f6nder\
-                </button>\
-            </div>\
-        </div>\
-    </div>\
-\
-    <!-- Y\'f6netici Paneli B\'f6l\'fcm\'fc -->\
-    <div id="adminSection" class="container mx-auto px-4 py-8" style="display: none;">\
-        <div class="bg-white p-6 md:p-10 rounded-xl shadow-lg">\
-            <div class="flex justify-between items-center mb-6">\
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Y\'f6netici Paneli</h1>\
-                <div class="flex items-center space-x-4">\
-                     <button id="homeBtnAdmin" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded-full text-sm hover:bg-indigo-600 transition duration-300">\
-                        Anasayfa\
-                    </button>\
-                    <p id="userWelcomeAdmin" class="text-sm font-medium text-gray-600"></p>\
-                    <button id="logoutBtnAdmin" class="text-sm text-red-600 hover:underline">\'c7\uc0\u305 k\u305 \u351  Yap</button>\
-                </div>\
-            </div>\
-            <div class="flex justify-between items-center mb-4">\
-                <div class="flex space-x-2">\
-                    <button id="viewOrdersBtn" class="bg-gray-200 text-gray-800 py-2 px-4 rounded-full text-sm font-semibold hover:bg-gray-300 transition duration-300">\
-                        T\'fcm Sipari\uc0\u351 ler\
-                    </button>\
-                    <button id="viewProductsBtn" class="bg-gray-200 text-gray-800 py-2 px-4 rounded-full text-sm font-semibold hover:bg-gray-300 transition duration-300">\
-                        T\'fcm \'dcr\'fcnler\
-                    </button>\
-                </div>\
-                <div class="flex space-x-2">\
-                    <button id="createUserBtn" class="bg-green-600 text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-green-700 transition duration-300">\
-                        Kullan\uc0\u305 c\u305  Olu\u351 tur\
-                    </button>\
-                    <button id="addProductBtn" class="bg-indigo-600 text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-indigo-700 transition duration-300">\
-                        \'dcr\'fcn Ekle\
-                    </button>\
-                </div>\
-            </div>\
-\
-            <!-- Sipari\uc0\u351  Y\'f6netim B\'f6l\'fcm\'fc -->\
-            <div id="adminOrdersSection">\
-                <h2 class="text-xl font-semibold text-gray-700 mb-4">T\'fcm Sipari\uc0\u351 ler</h2>\
-                <div id="adminOrderList">\
-                    <!-- Sipari\uc0\u351 ler buraya JavaScript ile dinamik olarak eklenecek -->\
-                </div>\
-            </div>\
-\
-            <!-- \'dcr\'fcn Y\'f6netim B\'f6l\'fcm\'fc -->\
-            <div id="adminProductsSection" style="display: none;">\
-                <h2 class="text-xl font-semibold text-gray-700 mb-4">T\'fcm \'dcr\'fcnler</h2>\
-                <div id="adminProductList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">\
-                    <!-- \'dcr\'fcnler buraya JavaScript ile dinamik olarak eklenecek -->\
-                </div>\
-            </div>\
-        </div>\
-    </div>\
-\
-    <!-- Modals -->\
-    <!-- Resim Pop-up Modal\uc0\u305  -->\
-    <div id="imageModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">\
-        <div class="bg-white p-2 rounded-lg relative">\
-            <button id="closeModalBtn" class="absolute top-0 right-0 m-2 text-white bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold leading-none">&times;</button>\
-            <img id="modalImage" src="" alt="B\'fcy\'fck G\'f6r\'fcnt\'fc" class="modal-image rounded-md">\
-        </div>\
-    </div>\
-    \
-    <!-- \uc0\u304 \u351 lem Ba\u351 ar\u305 l\u305  Pop-up Modal\u305  -->\
-    <div id="successModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">\
-        <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm">\
-            <h2 class="text-2xl font-bold text-green-600 mb-4">Ba\uc0\u351 ar\u305 l\u305 !</h2>\
-            <p id="successModalMessage" class="text-gray-700">\uc0\u304 \u351 lem ba\u351 ar\u305 yla tamamland\u305 .</p>\
-            <button id="closeSuccessModalBtn" class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">Tamam</button>\
-        </div>\
-    </div>\
-    \
-    <!-- \uc0\u304 \u351 lem Ba\u351 ar\u305 s\u305 z Pop-up Modal\u305  -->\
-    <div id="errorModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">\
-        <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm">\
-            <h2 class="text-2xl font-bold text-red-600 mb-4">Hata!</h2>\
-            <p id="errorMessage" class="text-gray-700">Bir hata olu\uc0\u351 tu. L\'fctfen tekrar deneyin.</p>\
-            <button id="closeErrorModalBtn" class="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">Tamam</button>\
-        </div>\
-    </div>\
-\
-    <!-- Kullan\uc0\u305 c\u305  Olu\u351 turma Modal\u305  -->\
-    <div id="createUserModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">\
-        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">\
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Yeni Kullan\uc0\u305 c\u305  Olu\u351 tur</h2>\
-            <form id="createUserForm" class="space-y-4">\
-                <div>\
-                    <label for="newUsername" class="block text-gray-700 font-medium mb-1">Kullan\uc0\u305 c\u305  Ad\u305 </label>\
-                    <input type="text" id="newUsername" name="username" placeholder="Kullan\uc0\u305 c\u305  Ad\u305 " class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div>\
-                    <label for="newPassword" class="block text-gray-700 font-medium mb-1">\uc0\u350 ifre</label>\
-                    <input type="password" id="newPassword" name="password" placeholder="\uc0\u350 ifre" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div class="flex justify-end space-x-2 mt-6">\
-                    <button type="button" id="cancelCreateUserBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">\uc0\u304 ptal</button>\
-                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-6 rounded-full hover:bg-green-700 transition duration-300">Olu\uc0\u351 tur</button>\
-                </div>\
-            </form>\
-        </div>\
-    </div>\
-\
-    <!-- \'dcr\'fcn Ekleme Modal\uc0\u305  -->\
-    <div id="addProductModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">\
-        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">\
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Yeni \'dcr\'fcn Ekle</h2>\
-            <form id="addProductForm" class="space-y-4">\
-                <div>\
-                    <label for="newProductName" class="block text-gray-700 font-medium mb-1">\'dcr\'fcn Ad\uc0\u305 </label>\
-                    <input type="text" id="newProductName" name="name" placeholder="\'dcr\'fcn Ad\uc0\u305 " class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div>\
-                    <label for="newProductPrice" class="block text-gray-700 font-medium mb-1">Fiyat (\'80)</label>\
-                    <input type="number" step="0.01" id="newProductPrice" name="price" placeholder="Fiyat (\'80)" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div>\
-                    <label for="newProductBoxQuantity" class="block text-gray-700 font-medium mb-1">Kutu \uc0\u304 \'e7i Adet</label>\
-                    <input type="number" id="newProductBoxQuantity" name="boxQuantity" placeholder="Kutu \uc0\u304 \'e7i Adet" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div>\
-                    <label for="newProductImageFile" class="block text-gray-700 font-medium mb-1">Resim Dosyas\uc0\u305  Se\'e7</label>\
-                    <input type="file" id="newProductImageFile" name="imageFile" accept="image/*" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">\
-                </div>\
-                <div class="flex justify-end space-x-2 mt-6">\
-                    <button type="button" id="cancelAddProductBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">\uc0\u304 ptal</button>\
-                    <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-6 rounded-full hover:bg-indigo-700 transition duration-300">Ekle</button>\
-                </div>\
-            </form>\
-        </div>\
-    </div>\
-    \
-    <!-- \'dcr\'fcn D\'fczenleme Modal\uc0\u305  -->\
-    <div id="editProductModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">\
-        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">\
-            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">\'dcr\'fcn\'fc D\'fczenle</h2>\
-            <form id="editProductForm" class="space-y-4">\
-                <input type="hidden" id="editProductId">\
-                <div>\
-                    <label for="editProductName" class="block text-gray-700 font-medium mb-1">\'dcr\'fcn Ad\uc0\u305 </label>\
-                    <input type="text" id="editProductName" name="name" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div>\
-                    <label for="editProductPrice" class="block text-gray-700 font-medium mb-1">Fiyat (\'80)</label>\
-                    <input type="number" step="0.01" id="editProductPrice" name="price" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div>\
-                    <label for="editProductBoxQuantity" class="block text-gray-700 font-medium mb-1">Kutu \uc0\u304 \'e7i Adet</label>\
-                    <input type="number" id="editProductBoxQuantity" name="boxQuantity" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>\
-                </div>\
-                <div class="flex flex-col items-center">\
-                    <img id="editProductImagePreview" src="" alt="\'dcr\'fcn Resmi" class="w-32 h-32 object-cover rounded-md mb-2">\
-                    <label for="editProductImageFile" class="block text-gray-700 font-medium mb-1">Resmi De\uc0\u287 i\u351 tir</label>\
-                    <input type="file" id="editProductImageFile" name="imageFile" accept="image/*" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">\
-                </div>\
-                <div class="flex justify-end space-x-2 mt-6">\
-                    <button type="button" id="cancelEditProductBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">\uc0\u304 ptal</button>\
-                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-6 rounded-full hover:bg-green-700 transition duration-300">Kaydet</button>\
-                </div>\
-            </form>\
-        </div>\
-    </div>\
-    \
-    <!-- Onay Modal\uc0\u305  -->\
-    <div id="confirmModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">\
-        <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm">\
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Emin misiniz?</h2>\
-            <p id="confirmMessage" class="text-gray-700 mb-6"></p>\
-            <div class="flex justify-center space-x-4">\
-                <button id="cancelConfirmBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">\uc0\u304 ptal</button>\
-                <button id="confirmActionBtn" class="bg-red-600 text-white font-bold py-2 px-6 rounded-full hover:bg-red-700 transition duration-300">Sil</button>\
-            </div>\
-        </div>\
-    </div>\
-\
-\
-    <script type="text/javascript">\
-        // Firebase'in kald\uc0\u305 r\u305 ld\u305 \u287 \u305 na dair bilgilendirme.\
-        // Bu uygulama, t\'fcm veriyi do\uc0\u287 rudan taray\u305 c\u305  belle\u287 inde (in-memory) saklar.\
-        // Bu nedenle sayfa yenilendi\uc0\u287 inde t\'fcm veriler (kullan\u305 c\u305 lar, \'fcr\'fcnler, sipari\u351 ler) kaybolacakt\u305 r.\
-\
-        // Kullan\uc0\u305 c\u305 lar ve rolleri\
-        const users = \{\
-            'admin': \{ username: 'admin', password: '123', role: 'admin' \},\
-            'deneme': \{ username: 'deneme', password: '123', role: 'user' \},\
-        \};\
-\
-        const state = \{\
-            products: [\
-                \{ id: 1, name: "Zeytinya\uc0\u287 \u305  (5L)", imageUrl: "https://placehold.co/400x300/a3e635/000?text=Zeytinya\u287 \u305 ", price: 25.00, sales: 150, boxQuantity: 1 \},\
-                \{ id: 2, name: "Un (25kg)", imageUrl: "https://placehold.co/400x300/fde047/000?text=Un", price: 12.50, sales: 200, boxQuantity: 1 \},\
-                \{ id: 3, name: "Tuz (5kg)", imageUrl: "https://placehold.co/400x300/6ee7b7/000?text=Tuz", price: 3.75, sales: 500, boxQuantity: 10 \},\
-                \{ id: 4, name: "\uc0\u350 eker (50kg)", imageUrl: "https://placehold.co/400x300/d8b4fe/000?text=\u350 eker", price: 65.00, sales: 80, boxQuantity: 1 \},\
-                \{ id: 5, name: "Pirin\'e7 (10kg)", imageUrl: "https://placehold.co/400x300/94a3b8/000?text=Pirin\'e7", price: 9.20, sales: 300, boxQuantity: 5 \},\
-                \{ id: 6, name: "Ay\'e7i\'e7ek Ya\uc0\u287 \u305  (18L)", imageUrl: "https://placehold.co/400x300/fca5a5/000?text=Ay\'e7i\'e7ek+Ya\u287 \u305 ", price: 32.00, sales: 250, boxQuantity: 1 \},\
-                \{ id: 7, name: "Domates Sal\'e7as\uc0\u305  (5kg)", imageUrl: "https://placehold.co/400x300/fb923c/000?text=Domates+Sal\'e7as\u305 ", price: 18.50, sales: 180, boxQuantity: 1 \},\
-                \{ id: 8, name: "Makarna (500g)", imageUrl: "https://placehold.co/400x300/c4b5fd/000?text=Makarna", price: 1.25, sales: 450, boxQuantity: 24 \},\
-                \{ id: 9, name: "Kuru Fasulye (1kg)", imageUrl: "https://placehold.co/400x300/a78bfa/000?text=Fasulye", price: 4.50, sales: 350, boxQuantity: 12 \},\
-                \{ id: 10, name: "Siyah Zeytin (1kg)", imageUrl: "https://placehold.co/400x300/22c55e/000?text=Siyah+Zeytin", price: 7.50, sales: 220, boxQuantity: 12 \},\
-                \{ id: 11, name: "Nohut (1kg)", imageUrl: "https://placehold.co/400x300/3b82f6/000?text=Nohut", price: 5.50, sales: 280, boxQuantity: 12 \},\
-                \{ id: 12, name: "Mercimek (1kg)", imageUrl: "https://placehold.co/400x300/ef4444/000?text=Mercimek", price: 4.00, sales: 310, boxQuantity: 12 \},\
-            ],\
-            orders: [], // Sipari\uc0\u351 ler ge\'e7ici olarak burada tutulur\
-            currentUser: null,\
-            sortKey: 'default'\
-        \};\
-\
-        // Elementleri \'e7ekme\
-        const loginSection = document.getElementById('loginSection');\
-        const appSection = document.getElementById('appSection');\
-        const adminSection = document.getElementById('adminSection');\
-        const productList = document.getElementById('productList');\
-        const sendOrderBtn = document.getElementById('sendOrderBtn');\
-        const grandTotalElement = document.getElementById('grandTotal');\
-        const sortSelect = document.getElementById('sort-select');\
-        const logoutBtn = document.getElementById('logoutBtn');\
-        const logoutBtnAdmin = document.getElementById('logoutBtnAdmin');\
-        const adminPanelBtn = document.getElementById('adminPanelBtn');\
-        const homeBtnAdmin = document.getElementById('homeBtnAdmin');\
-\
-        const adminOrdersSection = document.getElementById('adminOrdersSection');\
-        const adminProductsSection = document.getElementById('adminProductsSection');\
-        const viewOrdersBtn = document.getElementById('viewOrdersBtn');\
-        const viewProductsBtn = document.getElementById('viewProductsBtn');\
-        \
-        const adminOrderList = document.getElementById('adminOrderList');\
-        const adminProductList = document.getElementById('adminProductList');\
-        \
-        const imageModal = document.getElementById('imageModal');\
-        const modalImage = document.getElementById('modalImage');\
-        const successModal = document.getElementById('successModal');\
-        const errorModal = document.getElementById('errorModal');\
-        const userWelcome = document.getElementById('userWelcome');\
-        const loginForm = document.getElementById('loginForm');\
-        const userWelcomeAdmin = document.getElementById('userWelcomeAdmin');\
-        \
-        const createUserBtn = document.getElementById('createUserBtn');\
-        const createUserModal = document.getElementById('createUserModal');\
-        const createUserForm = document.getElementById('createUserForm');\
-        const cancelCreateUserBtn = document.getElementById('cancelCreateUserBtn');\
-        \
-        const addProductBtn = document.getElementById('addProductBtn');\
-        const addProductModal = document.getElementById('addProductModal');\
-        const addProductForm = document.getElementById('addProductForm');\
-        const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');\
-        \
-        const editProductModal = document.getElementById('editProductModal');\
-        const editProductForm = document.getElementById('editProductForm');\
-        const cancelEditProductBtn = document.getElementById('cancelEditProductBtn');\
-        const editProductIdInput = document.getElementById('editProductId');\
-        const editProductNameInput = document.getElementById('editProductName');\
-        const editProductPriceInput = document.getElementById('editProductPrice');\
-        const editProductBoxQuantityInput = document.getElementById('editProductBoxQuantity');\
-        const editProductImageFile = document.getElementById('editProductImageFile');\
-        const editProductImagePreview = document.getElementById('editProductImagePreview');\
-        \
-        const confirmModal = document.getElementById('confirmModal');\
-        const confirmMessage = document.getElementById('confirmMessage');\
-        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');\
-        const confirmActionBtn = document.getElementById('confirmActionBtn');\
-        \
-        // Modallar\uc0\u305  a\'e7ma/kapama fonksiyonlar\u305 \
-        function openModal(modalId) \{\
-            document.getElementById(modalId).classList.add('is-visible');\
-            document.body.classList.add('modal-open');\
-        \}\
-\
-        function closeModal(modalId) \{\
-            document.getElementById(modalId).classList.remove('is-visible');\
-            document.body.classList.remove('modal-open');\
-        \}\
-\
-        // Genel toplam\uc0\u305  g\'fcncelleme fonksiyonu\
-        function updateGrandTotal() \{\
-            let total = 0;\
-            state.products.forEach(product => \{\
-                const qtySelect = document.getElementById(`qty-$\{product.id\}`);\
-                const quantity = parseInt(qtySelect.value, 10) || 0;\
-                total += product.price * quantity;\
-            \});\
-            grandTotalElement.textContent = `$\{total.toFixed(2)\} \'80`;\
-        \}\
-\
-        // \'dcr\'fcnleri dinamik olarak sayfaya ekleme fonksiyonu\
-        function renderProducts(sortedProducts = state.products) \{\
-            productList.innerHTML = '';\
-            sortedProducts.forEach(product => \{\
-                const productItem = document.createElement('div');\
-                productItem.className = 'bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300';\
-                productItem.innerHTML = `\
-                    <div class="relative w-full h-32 overflow-hidden rounded-lg mb-3">\
-                        <img src="$\{product.imageUrl\}" onerror="this.onerror=null; this.src='https://placehold.co/400x300/ccc/fff?text=Resim+Yok';" alt="$\{product.name\}" \
-                            class="w-full h-full object-cover rounded-lg cursor-pointer" \
-                            data-large-url="$\{product.imageUrl\}">\
-                    </div>\
-                    <h3 class="text-sm font-semibold text-gray-700 mb-1">$\{product.name\}</h3>\
-                    <p class="text-xs text-gray-500 mb-1">Kutu \uc0\u304 \'e7i: $\{product.boxQuantity\} adet</p>\
-                    <p class="text-md font-bold text-gray-900 mb-2">$\{product.price.toFixed(2)\} \'80</p>\
-                    <div class="flex flex-col space-y-2">\
-                        <div class="flex items-center space-x-2">\
-                            <label for="qty-$\{product.id\}" class="text-sm text-gray-600">Adet:</label>\
-                            <select id="qty-$\{product.id\}" name="quantity" \
-                                class="w-full border border-gray-300 rounded-md p-1.5 text-center text-sm text-gray-800 \
-                                focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">\
-                                $\{Array.from(\{length: 101\}, (_, i) => `<option value="$\{i\}">$\{i\}</option>`).join('')\}\
-                            </select>\
-                        </div>\
-                        <p class="text-sm text-gray-700 font-medium">Toplam: <span id="subtotal-$\{product.id\}">0.00 \'80</span></p>\
-                    </div>\
-                `;\
-                productList.appendChild(productItem);\
-\
-                document.getElementById(`qty-$\{product.id\}`).addEventListener('change', (e) => \{\
-                    const quantity = parseInt(e.target.value, 10) || 0;\
-                    const subtotalElement = document.getElementById(`subtotal-$\{product.id\}`);\
-                    const subtotal = quantity * product.price;\
-                    subtotalElement.textContent = `$\{subtotal.toFixed(2)\} \'80`;\
-                    updateGrandTotal();\
-                \});\
-            \});\
-        \}\
-\
-        // \'dcr\'fcnleri s\uc0\u305 ralama fonksiyonu\
-        function sortProducts(sortBy) \{\
-            let sortedProducts = [...state.products];\
-            switch (sortBy) \{\
-                case 'price-asc':\
-                    sortedProducts.sort((a, b) => a.price - b.price);\
-                    break;\
-                case 'price-desc':\
-                    sortedProducts.sort((a, b) => b.price - a.price);\
-                    break;\
-                case 'sales-desc':\
-                    sortedProducts.sort((a, b) => b.sales - a.sales);\
-                    break;\
-                case 'default':\
-                default:\
-                    sortedProducts = state.products;\
-                    break;\
-            \}\
-            state.sortKey = sortBy;\
-            renderProducts(sortedProducts);\
-        \}\
-\
-        // Admin panelini render etme\
-        function renderAdminPanel() \{\
-            adminOrderList.innerHTML = '';\
-            if (state.orders.length === 0) \{\
-                adminOrderList.innerHTML = '<p class="text-center text-gray-500 mt-4">Hen\'fcz sipari\uc0\u351  yok.</p>';\
-                return;\
-            \}\
-            \
-            state.orders.forEach((order, index) => \{\
-                const orderItemsHtml = order.items.map(item => `\
-                    <li>$\{item.urun_adi\} - $\{item.siparis_adedi\} adet - $\{item.urun_toplam\} \'80</li>\
-                `).join('');\
-\
-                const orderDiv = document.createElement('div');\
-                orderDiv.className = 'bg-gray-100 p-4 rounded-lg shadow-inner mb-4';\
-                orderDiv.innerHTML = `\
-                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">\
-                        <div class="mb-2 md:mb-0">\
-                            <p class="font-semibold text-gray-800">Sipari\uc0\u351  No: $\{index + 1\}</p>\
-                            <p class="text-sm text-gray-600">Kullan\uc0\u305 c\u305 : $\{order.username\}</p>\
-                            <p class="text-sm text-gray-600">Sipari\uc0\u351  Tarihi: $\{new Date(order.timestamp).toLocaleString()\}</p>\
-                        </div>\
-                        <div class="flex space-x-2">\
-                            <button class="export-excel-btn bg-green-500 text-white text-sm py-2 px-4 rounded-full hover:bg-green-600 transition duration-300">Excel Olarak Al</button>\
-                            <button class="generate-proforma-btn bg-blue-500 text-white text-sm py-2 px-4 rounded-full hover:bg-blue-600 transition duration-300">Proforma Olu\uc0\u351 tur</button>\
-                        </div>\
-                    </div>\
-                    <ul class="list-disc list-inside mt-2 text-gray-700">\
-                        $\{orderItemsHtml\}\
-                    </ul>\
-                    <p class="font-bold text-lg mt-2 text-indigo-700">Genel Toplam: $\{order.grandTotal.toFixed(2)\} \'80</p>\
-                `;\
-                adminOrderList.appendChild(orderDiv);\
-            \});\
-        \}\
-        \
-        // Admin \'fcr\'fcn listesini render etme\
-        function renderAdminProducts() \{\
-            adminProductList.innerHTML = '';\
-            if (state.products.length === 0) \{\
-                adminProductList.innerHTML = '<p class="text-center text-gray-500 mt-4">Hen\'fcz \'fcr\'fcn eklenmedi.</p>';\
-                return;\
-            \}\
-            \
-            state.products.forEach(product => \{\
-                const productDiv = document.createElement('div');\
-                productDiv.className = 'bg-gray-100 p-4 rounded-lg shadow-inner flex flex-col items-center text-center';\
-                productDiv.innerHTML = `\
-                    <img src="$\{product.imageUrl\}" alt="$\{product.name\}" class="w-24 h-24 object-cover rounded-md mb-2">\
-                    <h4 class="font-semibold text-gray-800">$\{product.name\}</h4>\
-                    <p class="text-sm text-gray-600">$\{product.price.toFixed(2)\} \'80 / adet</p>\
-                    <p class="text-xs text-gray-500">Kutu \uc0\u304 \'e7i: $\{product.boxQuantity\} adet</p>\
-                    <div class="flex space-x-2 mt-4">\
-                        <button class="edit-product-btn bg-blue-500 text-white text-xs py-1 px-3 rounded-full hover:bg-blue-600 transition duration-300" data-id="$\{product.id\}">D\'fczenle</button>\
-                        <button class="delete-product-btn bg-red-500 text-white text-xs py-1 px-3 rounded-full hover:bg-red-600 transition duration-300" data-id="$\{product.id\}">Sil</button>\
-                    </div>\
-                `;\
-                adminProductList.appendChild(productDiv);\
-            \});\
-        \}\
-        \
-        // Excel'e aktarma fonksiyonu\
-        function exportToExcel(order) \{\
-            const header = "Siparis No,Kullanici,Urun Adi,Siparis Adedi,Birim Fiyat (\'80),Urun Toplam (\'80)\\n";\
-            let csvContent = header + order.items.map(item =>\
-                `"$\{order.timestamp\}","$\{order.username\}","$\{item.urun_adi\}",$\{item.siparis_adedi\},$\{item.birim_fiyat\},$\{item.urun_toplam\}`\
-            ).join('\\n');\
-\
-            const blob = new Blob([csvContent], \{ type: 'text/csv;charset=utf-8;' \});\
-            const link = document.createElement("a");\
-            const url = URL.createObjectURL(blob);\
-            link.setAttribute("href", url);\
-            link.setAttribute("download", `Siparis_$\{order.username\}_$\{new Date(order.timestamp).toISOString().slice(0, 10)\}.xls`);\
-            link.style.display = 'none';\
-            document.body.appendChild(link);\
-            link.click();\
-            document.body.removeChild(link);\
-        \}\
-\
-        // Proforma PDF olu\uc0\u351 turma fonksiyonu\
-        function generateProformaPDF(order) \{\
-            const itemsHtml = order.items.map(item => `\
-                <tr class="border-b">\
-                    <td class="p-2">$\{item.urun_adi\}</td>\
-                    <td class="p-2 text-center">$\{item.siparis_adedi\}</td>\
-                    <td class="p-2 text-right">$\{item.birim_fiyat\} \'80</td>\
-                    <td class="p-2 text-right">$\{item.urun_toplam\} \'80</td>\
-                </tr>\
-            `).join('');\
-\
-            const proformaHtml = `\
-                <div style="font-family: 'Inter', sans-serif; padding: 20px; max-width: 800px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">\
-                    <h1 style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px;">PROFORMA FATURA</h1>\
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">\
-                        <div>\
-                            <p><strong>Firma Ad\uc0\u305 :</strong> G\u305 da Da\u287 \u305 t\u305 m</p>\
-                            <p><strong>Adres:</strong> \'d6rnek Sokak, \'d6rnek Mah., Ankara</p>\
-                        </div>\
-                        <div>\
-                            <p><strong>Sipari\uc0\u351  No:</strong> $\{order.timestamp\}</p>\
-                            <p><strong>Tarih:</strong> $\{new Date(order.timestamp).toLocaleDateString()\}</p>\
-                        </div>\
-                    </div>\
-                    <hr style="border: 1px dashed #ccc; margin: 20px 0;">\
-                    <div>\
-                        <p><strong>M\'fc\uc0\u351 teri Ad\u305 :</strong> $\{order.username\}</p>\
-                    </div>\
-                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">\
-                        <thead>\
-                            <tr style="background-color: #f3f4f6;">\
-                                <th class="p-2 text-left">\'dcr\'fcn Ad\uc0\u305 </th>\
-                                <th class="p-2 text-center">Adet</th>\
-                                <th class="p-2 text-right">Birim Fiyat</th>\
-                                <th class="p-2 text-right">Toplam Fiyat</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody>\
-                            $\{itemsHtml\}\
-                        </tbody>\
-                    </table>\
-                    <div style="text-align: right; margin-top: 20px; font-size: 18px; font-weight: bold;">\
-                        <p>Genel Toplam: $\{order.grandTotal.toFixed(2)\} \'80</p>\
-                    </div>\
-                </div>\
-            `;\
-            \
-            const newWindow = window.open('', '_blank');\
-            if (newWindow) \{\
-                newWindow.document.write('<!DOCTYPE html><html><head><title>Proforma Fatura</title></head><body>');\
-                newWindow.document.write(proformaHtml);\
-                newWindow.document.write('</body></html>');\
-                newWindow.document.close();\
-                newWindow.print();\
-            \} else \{\
-                openModal('errorModal');\
-                document.getElementById('errorMessage').textContent = 'Proforma fatura penceresi a\'e7\uc0\u305 lamad\u305 . Taray\u305 c\u305  pop-up engelleyicisini kontrol edin.';\
-            \}\
-        \}\
-\
-        // Aray\'fcz\'fc kullan\uc0\u305 c\u305  durumuna g\'f6re g\'fcncelleme\
-        function updateUI() \{\
-            if (state.currentUser) \{\
-                loginSection.style.display = 'none';\
-                if (state.currentUser.role === 'admin') \{\
-                    appSection.style.display = 'none';\
-                    adminSection.style.display = 'block';\
-                    userWelcomeAdmin.textContent = `Ho\uc0\u351  geldiniz, Y\'f6netici ($\{state.currentUser.username\})`;\
-                    showAdminSection('orders');\
-                \} else \{\
-                    appSection.style.display = 'block';\
-                    adminSection.style.display = 'none';\
-                    userWelcome.textContent = `Ho\uc0\u351  geldiniz, $\{state.currentUser.username\}`;\
-                    renderProducts(state.products);\
-                \}\
-                \
-                // Admin butonu g\'f6r\'fcn\'fcrl\'fc\uc0\u287 \'fcn\'fc g\'fcncelle\
-                if (state.currentUser.role === 'admin') \{\
-                    adminPanelBtn.style.display = 'inline-block';\
-                \} else \{\
-                    adminPanelBtn.style.display = 'none';\
-                \}\
-            \} else \{\
-                loginSection.style.display = 'block';\
-                appSection.style.display = 'none';\
-                adminSection.style.display = 'none';\
-            \}\
-        \}\
-        \
-        // Admin panelindeki g\'f6r\'fcn\'fcm\'fc de\uc0\u287 i\u351 tirme\
-        function showAdminSection(section) \{\
-            adminOrdersSection.style.display = section === 'orders' ? 'block' : 'none';\
-            adminProductsSection.style.display = section === 'products' ? 'block' : 'none';\
-            \
-            viewOrdersBtn.classList.remove('bg-indigo-600', 'text-white');\
-            viewOrdersBtn.classList.add('bg-gray-200', 'text-gray-800');\
-            viewProductsBtn.classList.remove('bg-indigo-600', 'text-white');\
-            viewProductsBtn.classList.add('bg-gray-200', 'text-gray-800');\
-            \
-            if (section === 'orders') \{\
-                viewOrdersBtn.classList.remove('bg-gray-200', 'text-gray-800');\
-                viewOrdersBtn.classList.add('bg-indigo-600', 'text-white');\
-                renderAdminPanel();\
-            \} else \{\
-                viewProductsBtn.classList.remove('bg-gray-200', 'text-gray-800');\
-                viewProductsBtn.classList.add('bg-indigo-600', 'text-white');\
-                renderAdminProducts();\
-            \}\
-        \}\
-        \
-        // Olay dinleyicileri\
-        document.getElementById('loginForm').addEventListener('submit', async (e) => \{\
-            e.preventDefault();\
-            const username = e.target.username.value;\
-            const password = e.target.password.value;\
-            \
-            const user = users[username];\
-            if (user && user.password === password) \{\
-                state.currentUser = user;\
-                updateUI();\
-                openModal('successModal');\
-                document.getElementById('successModalMessage').textContent = 'Ba\uc0\u351 ar\u305 yla giri\u351  yap\u305 ld\u305 !';\
-            \} else \{\
-                openModal('errorModal');\
-                document.getElementById('errorMessage').textContent = 'Kullan\uc0\u305 c\u305  ad\u305  veya \u351 ifre hatal\u305 .';\
-            \}\
-        \});\
-\
-        document.getElementById('logoutBtn').addEventListener('click', () => \{\
-            state.currentUser = null;\
-            updateUI();\
-        \});\
-\
-        document.getElementById('logoutBtnAdmin').addEventListener('click', () => \{\
-            state.currentUser = null;\
-            updateUI();\
-        \});\
-        \
-        adminPanelBtn.addEventListener('click', () => \{\
-            appSection.style.display = 'none';\
-            adminSection.style.display = 'block';\
-            showAdminSection('orders');\
-        \});\
-\
-        homeBtnAdmin.addEventListener('click', () => \{\
-            adminSection.style.display = 'none';\
-            appSection.style.display = 'block';\
-            renderProducts(state.products);\
-        \});\
-\
-        viewOrdersBtn.addEventListener('click', () => \{\
-            showAdminSection('orders');\
-        \});\
-\
-        viewProductsBtn.addEventListener('click', () => \{\
-            showAdminSection('products');\
-        \});\
-\
-        createUserBtn.addEventListener('click', () => \{\
-            openModal('createUserModal');\
-        \});\
-\
-        addProductBtn.addEventListener('click', () => \{\
-            openModal('addProductModal');\
-        \});\
-        \
-        cancelCreateUserBtn.addEventListener('click', () => \{\
-            closeModal('createUserModal');\
-            createUserForm.reset();\
-        \});\
-\
-        cancelAddProductBtn.addEventListener('click', () => \{\
-            closeModal('addProductModal');\
-            addProductForm.reset();\
-        \});\
-\
-        addProductForm.addEventListener('submit', (e) => \{\
-            e.preventDefault();\
-            const name = document.getElementById('newProductName').value;\
-            const price = parseFloat(document.getElementById('newProductPrice').value);\
-            const boxQuantity = parseInt(document.getElementById('newProductBoxQuantity').value, 10);\
-            const imageFile = document.getElementById('newProductImageFile').files[0];\
-\
-            if (isNaN(price) || price <= 0) \{\
-                openModal('errorModal');\
-                document.getElementById('errorMessage').textContent = 'Ge\'e7erli bir fiyat girin.';\
-                return;\
-            \}\
-            if (isNaN(boxQuantity) || boxQuantity <= 0) \{\
-                openModal('errorModal');\
-                document.getElementById('errorMessage').textContent = 'Ge\'e7erli bir kutu i\'e7i adet bilgisi girin.';\
-                return;\
-            \}\
-\
-            const reader = new FileReader();\
-            reader.onload = function(e) \{\
-                const newProduct = \{\
-                    id: Date.now(), \
-                    name: name,\
-                    imageUrl: e.target.result, \
-                    price: price,\
-                    sales: 0, \
-                    boxQuantity: boxQuantity\
-                \};\
-\
-                state.products.push(newProduct);\
-                \
-                openModal('successModal');\
-                document.getElementById('successModalMessage').textContent = `$\{name\} adl\uc0\u305  \'fcr\'fcn ba\u351 ar\u305 yla eklendi!`;\
-                closeModal('addProductModal');\
-                addProductForm.reset();\
-                \
-                renderProducts(state.products);\
-                updateGrandTotal();\
-                renderAdminProducts();\
-            \};\
-            if (imageFile) \{\
-                 reader.readAsDataURL(imageFile);\
-            \} else \{\
-                 openModal('errorModal');\
-                 document.getElementById('errorMessage').textContent = 'L\'fctfen bir resim dosyas\uc0\u305  se\'e7in.';\
-            \}\
-        \});\
-\
-        createUserForm.addEventListener('submit', (e) => \{\
-            e.preventDefault();\
-            const newUsername = e.target.username.value;\
-            const newPassword = e.target.password.value;\
-            \
-            if (users[newUsername]) \{\
-                openModal('errorModal');\
-                document.getElementById('errorMessage').textContent = 'Bu kullan\uc0\u305 c\u305  ad\u305  zaten mevcut. L\'fctfen ba\u351 ka bir kullan\u305 c\u305  ad\u305  se\'e7in.';\
-                return;\
-            \}\
-\
-            users[newUsername] = \{\
-                username: newUsername,\
-                password: newPassword,\
-                role: 'user'\
-            \};\
-            \
-            openModal('successModal');\
-            document.getElementById('successModalMessage').textContent = `Yeni kullan\uc0\u305 c\u305  olu\u351 turuldu! Kullan\u305 c\u305  Ad\u305 : "$\{newUsername\}" ve \u350 ifre: "$\{newPassword\}"`;\
-            closeModal('createUserModal');\
-            createUserForm.reset();\
-        \});\
-\
-        sortSelect.addEventListener('change', (e) => \{\
-            sortProducts(e.target.value);\
-        \});\
-        \
-        adminOrderList.addEventListener('click', (e) => \{\
-            const orderDiv = e.target.closest('.bg-gray-100.p-4');\
-            if (!orderDiv) return;\
-\
-            const orderIndex = Array.from(adminOrderList.children).indexOf(orderDiv);\
-            const order = state.orders[orderIndex];\
-\
-            if (e.target.classList.contains('export-excel-btn')) \{\
-                exportToExcel(order);\
-            \} else if (e.target.classList.contains('generate-proforma-btn')) \{\
-                generateProformaPDF(order);\
-            \}\
-        \});\
-        \
-        // \'dcr\'fcn silme ve d\'fczenleme\
-        adminProductsSection.addEventListener('click', (e) => \{\
-            const button = e.target.closest('button');\
-            if (!button) return;\
-            const productId = parseInt(button.dataset.id, 10);\
-            const productIndex = state.products.findIndex(p => p.id === productId);\
-\
-            if (button.classList.contains('delete-product-btn')) \{\
-                confirmMessage.textContent = `$\{state.products[productIndex].name\} \'fcr\'fcn\'fcn\'fc silmek istedi\uc0\u287 inizden emin misiniz?`;\
-                openModal('confirmModal');\
-                confirmActionBtn.onclick = () => \{\
-                    if (productIndex !== -1) \{\
-                        state.products.splice(productIndex, 1);\
-                        renderAdminProducts();\
-                        renderProducts();\
-                        closeModal('confirmModal');\
-                        openModal('successModal');\
-                        document.getElementById('successModalMessage').textContent = '\'dcr\'fcn ba\uc0\u351 ar\u305 yla silindi!';\
-                    \}\
-                \};\
-            \} else if (button.classList.contains('edit-product-btn')) \{\
-                const productToEdit = state.products[productIndex];\
-                editProductIdInput.value = productToEdit.id;\
-                editProductNameInput.value = productToEdit.name;\
-                editProductPriceInput.value = productToEdit.price;\
-                editProductBoxQuantityInput.value = productToEdit.boxQuantity;\
-                editProductImagePreview.src = productToEdit.imageUrl;\
-                openModal('editProductModal');\
-            \}\
-        \});\
-\
-        editProductForm.addEventListener('submit', (e) => \{\
-            e.preventDefault();\
-            const id = parseInt(editProductIdInput.value, 10);\
-            const productIndex = state.products.findIndex(p => p.id === id);\
-            \
-            if (productIndex !== -1) \{\
-                const updatedProduct = state.products[productIndex];\
-                updatedProduct.name = editProductNameInput.value;\
-                updatedProduct.price = parseFloat(editProductPriceInput.value);\
-                updatedProduct.boxQuantity = parseInt(editProductBoxQuantityInput.value, 10);\
-                \
-                const newImageFile = editProductImageFile.files[0];\
-                if (newImageFile) \{\
-                    const reader = new FileReader();\
-                    reader.onload = function(e) \{\
-                        updatedProduct.imageUrl = e.target.result;\
-                        closeModal('editProductModal');\
-                        renderAdminProducts();\
-                        renderProducts();\
-                        openModal('successModal');\
-                        document.getElementById('successModalMessage').textContent = '\'dcr\'fcn ba\uc0\u351 ar\u305 yla g\'fcncellendi!';\
-                    \};\
-                    reader.readAsDataURL(newImageFile);\
-                \} else \{\
-                    closeModal('editProductModal');\
-                    renderAdminProducts();\
-                    renderProducts();\
-                    openModal('successModal');\
-                    document.getElementById('successModalMessage').textContent = '\'dcr\'fcn ba\uc0\u351 ar\u305 yla g\'fcncellendi!';\
-                \}\
-            \}\
-        \});\
-\
-        sendOrderBtn.addEventListener('click', () => \{\
-            const orderData = [];\
-            let hasValidOrder = false;\
-\
-            state.products.forEach(product => \{\
-                const qtySelect = document.getElementById(`qty-$\{product.id\}`);\
-                const quantity = parseInt(qtySelect.value, 10) || 0;\
-\
-                if (quantity > 0) \{\
-                    orderData.push(\{\
-                        urun_adi: product.name,\
-                        siparis_adedi: quantity,\
-                        birim_fiyat: product.price,\
-                        urun_toplam: (quantity * product.price).toFixed(2)\
-                    \});\
-                    hasValidOrder = true;\
-                \}\
-            \});\
-\
-            if (hasValidOrder) \{\
-                sendOrderBtn.textContent = 'G\'f6nderiliyor...';\
-                sendOrderBtn.disabled = true;\
-\
-                const newOrder = \{\
-                    username: state.currentUser.username,\
-                    items: orderData,\
-                    grandTotal: orderData.reduce((acc, item) => acc + parseFloat(item.urun_toplam), 0),\
-                    timestamp: Date.now()\
-                \};\
-                \
-                state.orders.push(newOrder);\
-                \
-                openModal('successModal');\
-                document.getElementById('successModalMessage').textContent = 'Sipari\uc0\u351 iniz ba\u351 ar\u305 yla al\u305 nd\u305 !';\
-                \
-                sendOrderBtn.textContent = 'Sipari\uc0\u351 i Olu\u351 tur ve G\'f6nder';\
-                sendOrderBtn.disabled = false;\
-                \
-            \} else \{\
-                openModal('errorModal');\
-                document.getElementById('errorMessage').textContent = 'Sipari\uc0\u351  listesinde \'fcr\'fcn bulunmamaktad\u305 r.';\
-            \}\
-        \});\
-        \
-        productList.addEventListener('click', (e) => \{\
-            const img = e.target.closest('img');\
-            if (img && img.dataset.largeUrl) \{\
-                openModal('imageModal');\
-                modalImage.src = img.dataset.largeUrl;\
-            \}\
-        \});\
-\
-        document.getElementById('closeModalBtn').addEventListener('click', () => closeModal('imageModal'));\
-        document.getElementById('closeSuccessModalBtn').addEventListener('click', () => \{\
-            closeModal('successModal');\
-            if (state.currentUser && state.currentUser.role === 'user') \{\
-                state.products.forEach(product => \{\
-                    const qtySelect = document.getElementById(`qty-$\{product.id\}`);\
-                    if (qtySelect) qtySelect.value = 0;\
-                \});\
-                updateGrandTotal();\
-            \}\
-        \});\
-        document.getElementById('closeErrorModalBtn').addEventListener('click', () => closeModal('errorModal'));\
-        document.getElementById('cancelEditProductBtn').addEventListener('click', () => closeModal('editProductModal'));\
-        document.getElementById('cancelConfirmBtn').addEventListener('click', () => closeModal('confirmModal'));\
-        imageModal.addEventListener('click', (e) => \{ if (e.target.id === 'imageModal') closeModal('imageModal'); \});\
-        successModal.addEventListener('click', (e) => \{ if (e.target.id === 'successModal') closeModal('successModal'); \});\
-        errorModal.addEventListener('click', (e) => \{ if (e.target.id === 'errorModal') closeModal('errorModal'); \});\
-        createUserModal.addEventListener('click', (e) => \{ if (e.target.id === 'createUserModal') closeModal('createUserModal'); \});\
-        addProductModal.addEventListener('click', (e) => \{ if (e.target.id === 'addProductModal') closeModal('addProductModal'); \});\
-        editProductModal.addEventListener('click', (e) => \{ if (e.target.id === 'editProductModal') closeModal('editProductModal'); \});\
-        confirmModal.addEventListener('click', (e) => \{ if (e.target.id === 'confirmModal') closeModal('confirmModal'); \});\
-        \
-        updateUI();\
-\
-    </script>\
-</body>\
-</html>\
-}
+    <!-- Giriş Bölümü -->
+    <div id="loginSection" class="container mx-auto px-4 py-8 max-w-lg">
+        <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Giriş Yap</h1>
+            
+            <form id="loginForm" class="space-y-4">
+                <input type="text" id="loginUsername" name="username" placeholder="Kullanıcı Adı" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                <input type="password" id="loginPassword" name="password" placeholder="Şifre" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-full hover:bg-indigo-700 transition duration-300">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Ana Uygulama Bölümü (Kullanıcı Paneli) -->
+    <div id="appSection" class="container mx-auto px-4 py-8" style="display: none;">
+        <div class="bg-white p-6 md:p-10 rounded-xl shadow-lg">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Alt Bayi Sipariş Ekranı</h1>
+                <div class="flex items-center space-x-4">
+                    <button id="adminPanelBtn" style="display: none;" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded-full text-sm hover:bg-indigo-600 transition duration-300">
+                        Yönetim Paneli
+                    </button>
+                    <p id="userWelcome" class="text-sm font-medium text-gray-600"></p>
+                    <button id="logoutBtn" class="text-sm text-red-600 hover:underline">Çıkış Yap</button>
+                </div>
+            </div>
+            <p class="text-center text-gray-500 mb-8">Ürün listesinden siparişinizi oluşturabilirsiniz.</p>
+            <div class="flex justify-end items-center mb-4">
+                <div class="flex items-center space-x-2">
+                    <label for="sort-select" class="text-sm font-medium text-gray-600">Sırala:</label>
+                    <select id="sort-select" class="p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="default">Varsayılan</option>
+                        <option value="price-asc">Fiyata Göre (Artan)</option>
+                        <option value="price-desc">Fiyata Göre (Azalan)</option>
+                        <option value="sales-desc">Çok Satana Göre</option>
+                    </select>
+                </div>
+                <div class="bg-indigo-100 text-indigo-800 font-semibold py-2 px-4 rounded-lg shadow-inner ml-4">
+                    <span class="text-sm">Genel Toplam:</span>
+                    <span id="grandTotal" class="text-lg">0.00 €</span>
+                </div>
+            </div>
+            <div id="productList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                <!-- Ürünler buraya JavaScript ile dinamik olarak eklenecek -->
+            </div>
+            <div class="mt-10 text-center">
+                <button id="sendOrderBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+                    Siparişi Oluştur ve Gönder
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Yönetici Paneli Bölümü -->
+    <div id="adminSection" class="container mx-auto px-4 py-8" style="display: none;">
+        <div class="bg-white p-6 md:p-10 rounded-xl shadow-lg">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Yönetici Paneli</h1>
+                <div class="flex items-center space-x-4">
+                     <button id="homeBtnAdmin" class="bg-indigo-500 text-white font-bold py-2 px-4 rounded-full text-sm hover:bg-indigo-600 transition duration-300">
+                        Anasayfa
+                    </button>
+                    <p id="userWelcomeAdmin" class="text-sm font-medium text-gray-600"></p>
+                    <button id="logoutBtnAdmin" class="text-sm text-red-600 hover:underline">Çıkış Yap</button>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex space-x-2">
+                    <button id="viewOrdersBtn" class="bg-gray-200 text-gray-800 py-2 px-4 rounded-full text-sm font-semibold hover:bg-gray-300 transition duration-300">
+                        Tüm Siparişler
+                    </button>
+                    <button id="viewProductsBtn" class="bg-gray-200 text-gray-800 py-2 px-4 rounded-full text-sm font-semibold hover:bg-gray-300 transition duration-300">
+                        Tüm Ürünler
+                    </button>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="createUserBtn" class="bg-green-600 text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-green-700 transition duration-300">
+                        Kullanıcı Oluştur
+                    </button>
+                    <button id="addProductBtn" class="bg-indigo-600 text-white py-2 px-4 rounded-full text-sm font-semibold hover:bg-indigo-700 transition duration-300">
+                        Ürün Ekle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sipariş Yönetim Bölümü -->
+            <div id="adminOrdersSection">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Tüm Siparişler</h2>
+                <div id="adminOrderList">
+                    <!-- Siparişler buraya JavaScript ile dinamik olarak eklenecek -->
+                </div>
+            </div>
+
+            <!-- Ürün Yönetim Bölümü -->
+            <div id="adminProductsSection" style="display: none;">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">Tüm Ürünler</h2>
+                <div id="adminProductList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Ürünler buraya JavaScript ile dinamik olarak eklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Resim Pop-up Modalı -->
+    <div id="imageModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">
+        <div class="bg-white p-2 rounded-lg relative">
+            <button id="closeModalBtn" class="absolute top-0 right-0 m-2 text-white bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold leading-none">&times;</button>
+            <img id="modalImage" src="" alt="Büyük Görüntü" class="modal-image rounded-md">
+        </div>
+    </div>
+    
+    <!-- İşlem Başarılı Pop-up Modalı -->
+    <div id="successModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm">
+            <h2 class="text-2xl font-bold text-green-600 mb-4">Başarılı!</h2>
+            <p id="successModalMessage" class="text-gray-700">İşlem başarıyla tamamlandı.</p>
+            <button id="closeSuccessModalBtn" class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">Tamam</button>
+        </div>
+    </div>
+    
+    <!-- İşlem Başarısız Pop-up Modalı -->
+    <div id="errorModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm">
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Hata!</h2>
+            <p id="errorMessage" class="text-gray-700">Bir hata oluştu. Lütfen tekrar deneyin.</p>
+            <button id="closeErrorModalBtn" class="mt-6 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">Tamam</button>
+        </div>
+    </div>
+
+    <!-- Kullanıcı Oluşturma Modalı -->
+    <div id="createUserModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Yeni Kullanıcı Oluştur</h2>
+            <form id="createUserForm" class="space-y-4">
+                <div>
+                    <label for="newUsername" class="block text-gray-700 font-medium mb-1">Kullanıcı Adı</label>
+                    <input type="text" id="newUsername" name="username" placeholder="Kullanıcı Adı" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div>
+                    <label for="newPassword" class="block text-gray-700 font-medium mb-1">Şifre</label>
+                    <input type="password" id="newPassword" name="password" placeholder="Şifre" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div class="flex justify-end space-x-2 mt-6">
+                    <button type="button" id="cancelCreateUserBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">İptal</button>
+                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-6 rounded-full hover:bg-green-700 transition duration-300">Oluştur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ürün Ekleme Modalı -->
+    <div id="addProductModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Yeni Ürün Ekle</h2>
+            <form id="addProductForm" class="space-y-4">
+                <div>
+                    <label for="newProductName" class="block text-gray-700 font-medium mb-1">Ürün Adı</label>
+                    <input type="text" id="newProductName" name="name" placeholder="Ürün Adı" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div>
+                    <label for="newProductPrice" class="block text-gray-700 font-medium mb-1">Fiyat (€)</label>
+                    <input type="number" step="0.01" id="newProductPrice" name="price" placeholder="Fiyat (€)" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div>
+                    <label for="newProductBoxQuantity" class="block text-gray-700 font-medium mb-1">Kutu İçi Adet</label>
+                    <input type="number" id="newProductBoxQuantity" name="boxQuantity" placeholder="Kutu İçi Adet" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div>
+                    <label for="newProductImageFile" class="block text-gray-700 font-medium mb-1">Resim Dosyası Seç</label>
+                    <input type="file" id="newProductImageFile" name="imageFile" accept="image/*" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="flex justify-end space-x-2 mt-6">
+                    <button type="button" id="cancelAddProductBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">İptal</button>
+                    <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-6 rounded-full hover:bg-indigo-700 transition duration-300">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Ürün Düzenleme Modalı -->
+    <div id="editProductModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Ürünü Düzenle</h2>
+            <form id="editProductForm" class="space-y-4">
+                <input type="hidden" id="editProductId">
+                <div>
+                    <label for="editProductName" class="block text-gray-700 font-medium mb-1">Ürün Adı</label>
+                    <input type="text" id="editProductName" name="name" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div>
+                    <label for="editProductPrice" class="block text-gray-700 font-medium mb-1">Fiyat (€)</label>
+                    <input type="number" step="0.01" id="editProductPrice" name="price" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div>
+                    <label for="editProductBoxQuantity" class="block text-gray-700 font-medium mb-1">Kutu İçi Adet</label>
+                    <input type="number" id="editProductBoxQuantity" name="boxQuantity" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img id="editProductImagePreview" src="" alt="Ürün Resmi" class="w-32 h-32 object-cover rounded-md mb-2">
+                    <label for="editProductImageFile" class="block text-gray-700 font-medium mb-1">Resmi Değiştir</label>
+                    <input type="file" id="editProductImageFile" name="imageFile" accept="image/*" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="flex justify-end space-x-2 mt-6">
+                    <button type="button" id="cancelEditProductBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">İptal</button>
+                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-6 rounded-full hover:bg-green-700 transition duration-300">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Onay Modalı -->
+    <div id="confirmModal" class="modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 opacity-0 invisible z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl text-center max-w-sm">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Emin misiniz?</h2>
+            <p id="confirmMessage" class="text-gray-700 mb-6"></p>
+            <div class="flex justify-center space-x-4">
+                <button id="cancelConfirmBtn" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-400 transition duration-300">İptal</button>
+                <button id="confirmActionBtn" class="bg-red-600 text-white font-bold py-2 px-6 rounded-full hover:bg-red-700 transition duration-300">Sil</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        // Firebase'in kaldırıldığına dair bilgilendirme.
+        // Bu uygulama, tüm veriyi doğrudan tarayıcı belleğinde (in-memory) saklar.
+        // Bu nedenle sayfa yenilendiğinde tüm veriler (kullanıcılar, ürünler, siparişler) kaybolacaktır.
+
+        // Kullanıcılar ve rolleri
+        const users = {
+            'admin': { username: 'admin', password: '123', role: 'admin' },
+            'deneme': { username: 'deneme', password: '123', role: 'user' },
+        };
+
+        const state = {
+            products: [
+                { id: 1, name: "Zeytinyağı (5L)", imageUrl: "https://placehold.co/400x300/a3e635/000?text=Zeytinyağı", price: 25.00, sales: 150, boxQuantity: 1 },
+                { id: 2, name: "Un (25kg)", imageUrl: "https://placehold.co/400x300/fde047/000?text=Un", price: 12.50, sales: 200, boxQuantity: 1 },
+                { id: 3, name: "Tuz (5kg)", imageUrl: "https://placehold.co/400x300/6ee7b7/000?text=Tuz", price: 3.75, sales: 500, boxQuantity: 10 },
+                { id: 4, name: "Şeker (50kg)", imageUrl: "https://placehold.co/400x300/d8b4fe/000?text=Şeker", price: 65.00, sales: 80, boxQuantity: 1 },
+                { id: 5, name: "Pirinç (10kg)", imageUrl: "https://placehold.co/400x300/94a3b8/000?text=Pirinç", price: 9.20, sales: 300, boxQuantity: 5 },
+                { id: 6, name: "Ayçiçek Yağı (18L)", imageUrl: "https://placehold.co/400x300/fca5a5/000?text=Ayçiçek+Yağı", price: 32.00, sales: 250, boxQuantity: 1 },
+                { id: 7, name: "Domates Salçası (5kg)", imageUrl: "https://placehold.co/400x300/fb923c/000?text=Domates+Salçası", price: 18.50, sales: 180, boxQuantity: 1 },
+                { id: 8, name: "Makarna (500g)", imageUrl: "https://placehold.co/400x300/c4b5fd/000?text=Makarna", price: 1.25, sales: 450, boxQuantity: 24 },
+                { id: 9, name: "Kuru Fasulye (1kg)", imageUrl: "https://placehold.co/400x300/a78bfa/000?text=Fasulye", price: 4.50, sales: 350, boxQuantity: 12 },
+                { id: 10, name: "Siyah Zeytin (1kg)", imageUrl: "https://placehold.co/400x300/22c55e/000?text=Siyah+Zeytin", price: 7.50, sales: 220, boxQuantity: 12 },
+                { id: 11, name: "Nohut (1kg)", imageUrl: "https://placehold.co/400x300/3b82f6/000?text=Nohut", price: 5.50, sales: 280, boxQuantity: 12 },
+                { id: 12, name: "Mercimek (1kg)", imageUrl: "https://placehold.co/400x300/ef4444/000?text=Mercimek", price: 4.00, sales: 310, boxQuantity: 12 },
+            ],
+            orders: [], // Siparişler geçici olarak burada tutulur
+            currentUser: null,
+            sortKey: 'default'
+        };
+
+        // Elementleri çekme
+        const loginSection = document.getElementById('loginSection');
+        const appSection = document.getElementById('appSection');
+        const adminSection = document.getElementById('adminSection');
+        const productList = document.getElementById('productList');
+        const sendOrderBtn = document.getElementById('sendOrderBtn');
+        const grandTotalElement = document.getElementById('grandTotal');
+        const sortSelect = document.getElementById('sort-select');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutBtnAdmin = document.getElementById('logoutBtnAdmin');
+        const adminPanelBtn = document.getElementById('adminPanelBtn');
+        const homeBtnAdmin = document.getElementById('homeBtnAdmin');
+
+        const adminOrdersSection = document.getElementById('adminOrdersSection');
+        const adminProductsSection = document.getElementById('adminProductsSection');
+        const viewOrdersBtn = document.getElementById('viewOrdersBtn');
+        const viewProductsBtn = document.getElementById('viewProductsBtn');
+        
+        const adminOrderList = document.getElementById('adminOrderList');
+        const adminProductList = document.getElementById('adminProductList');
+        
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const successModal = document.getElementById('successModal');
+        const errorModal = document.getElementById('errorModal');
+        const userWelcome = document.getElementById('userWelcome');
+        const loginForm = document.getElementById('loginForm');
+        const userWelcomeAdmin = document.getElementById('userWelcomeAdmin');
+        
+        const createUserBtn = document.getElementById('createUserBtn');
+        const createUserModal = document.getElementById('createUserModal');
+        const createUserForm = document.getElementById('createUserForm');
+        const cancelCreateUserBtn = document.getElementById('cancelCreateUserBtn');
+        
+        const addProductBtn = document.getElementById('addProductBtn');
+        const addProductModal = document.getElementById('addProductModal');
+        const addProductForm = document.getElementById('addProductForm');
+        const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');
+        
+        const editProductModal = document.getElementById('editProductModal');
+        const editProductForm = document.getElementById('editProductForm');
+        const cancelEditProductBtn = document.getElementById('cancelEditProductBtn');
+        const editProductIdInput = document.getElementById('editProductId');
+        const editProductNameInput = document.getElementById('editProductName');
+        const editProductPriceInput = document.getElementById('editProductPrice');
+        const editProductBoxQuantityInput = document.getElementById('editProductBoxQuantity');
+        const editProductImageFile = document.getElementById('editProductImageFile');
+        const editProductImagePreview = document.getElementById('editProductImagePreview');
+        
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmMessage = document.getElementById('confirmMessage');
+        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+        const confirmActionBtn = document.getElementById('confirmActionBtn');
+        
+        // Modalları açma/kapama fonksiyonları
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('is-visible');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('is-visible');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Genel toplamı güncelleme fonksiyonu
+        function updateGrandTotal() {
+            let total = 0;
+            state.products.forEach(product => {
+                const qtySelect = document.getElementById(`qty-${product.id}`);
+                const quantity = parseInt(qtySelect.value, 10) || 0;
+                total += product.price * quantity;
+            });
+            grandTotalElement.textContent = `${total.toFixed(2)} €`;
+        }
+
+        // Ürünleri dinamik olarak sayfaya ekleme fonksiyonu
+        function renderProducts(sortedProducts = state.products) {
+            productList.innerHTML = '';
+            sortedProducts.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.className = 'bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300';
+                productItem.innerHTML = `
+                    <div class="relative w-full h-32 overflow-hidden rounded-lg mb-3">
+                        <img src="${product.imageUrl}" onerror="this.onerror=null; this.src='https://placehold.co/400x300/ccc/fff?text=Resim+Yok';" alt="${product.name}" 
+                            class="w-full h-full object-cover rounded-lg cursor-pointer" 
+                            data-large-url="${product.imageUrl}">
+                    </div>
+                    <h3 class="text-sm font-semibold text-gray-700 mb-1">${product.name}</h3>
+                    <p class="text-xs text-gray-500 mb-1">Kutu İçi: ${product.boxQuantity} adet</p>
+                    <p class="text-md font-bold text-gray-900 mb-2">${product.price.toFixed(2)} €</p>
+                    <div class="flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <label for="qty-${product.id}" class="text-sm text-gray-600">Adet:</label>
+                            <select id="qty-${product.id}" name="quantity" 
+                                class="w-full border border-gray-300 rounded-md p-1.5 text-center text-sm text-gray-800 
+                                focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                                ${Array.from({length: 101}, (_, i) => `<option value="${i}">${i}</option>`).join('')}
+                            </select>
+                        </div>
+                        <p class="text-sm text-gray-700 font-medium">Toplam: <span id="subtotal-${product.id}">0.00 €</span></p>
+                    </div>
+                `;
+                productList.appendChild(productItem);
+
+                document.getElementById(`qty-${product.id}`).addEventListener('change', (e) => {
+                    const quantity = parseInt(e.target.value, 10) || 0;
+                    const subtotalElement = document.getElementById(`subtotal-${product.id}`);
+                    const subtotal = quantity * product.price;
+                    subtotalElement.textContent = `${subtotal.toFixed(2)} €`;
+                    updateGrandTotal();
+                });
+            });
+        }
+
+        // Ürünleri sıralama fonksiyonu
+        function sortProducts(sortBy) {
+            let sortedProducts = [...state.products];
+            switch (sortBy) {
+                case 'price-asc':
+                    sortedProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    sortedProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'sales-desc':
+                    sortedProducts.sort((a, b) => b.sales - a.sales);
+                    break;
+                case 'default':
+                default:
+                    sortedProducts = state.products;
+                    break;
+            }
+            state.sortKey = sortBy;
+            renderProducts(sortedProducts);
+        }
+
+        // Admin panelini render etme
+        function renderAdminPanel() {
+            adminOrderList.innerHTML = '';
+            if (state.orders.length === 0) {
+                adminOrderList.innerHTML = '<p class="text-center text-gray-500 mt-4">Henüz sipariş yok.</p>';
+                return;
+            }
+            
+            state.orders.forEach((order, index) => {
+                const orderItemsHtml = order.items.map(item => `
+                    <li>${item.urun_adi} - ${item.siparis_adedi} adet - ${item.urun_toplam} €</li>
+                `).join('');
+
+                const orderDiv = document.createElement('div');
+                orderDiv.className = 'bg-gray-100 p-4 rounded-lg shadow-inner mb-4';
+                orderDiv.innerHTML = `
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                        <div class="mb-2 md:mb-0">
+                            <p class="font-semibold text-gray-800">Sipariş No: ${index + 1}</p>
+                            <p class="text-sm text-gray-600">Kullanıcı: ${order.username}</p>
+                            <p class="text-sm text-gray-600">Sipariş Tarihi: ${new Date(order.timestamp).toLocaleString()}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="export-excel-btn bg-green-500 text-white text-sm py-2 px-4 rounded-full hover:bg-green-600 transition duration-300">Excel Olarak Al</button>
+                            <button class="generate-proforma-btn bg-blue-500 text-white text-sm py-2 px-4 rounded-full hover:bg-blue-600 transition duration-300">Proforma Oluştur</button>
+                        </div>
+                    </div>
+                    <ul class="list-disc list-inside mt-2 text-gray-700">
+                        ${orderItemsHtml}
+                    </ul>
+                    <p class="font-bold text-lg mt-2 text-indigo-700">Genel Toplam: ${order.grandTotal.toFixed(2)} €</p>
+                `;
+                adminOrderList.appendChild(orderDiv);
+            });
+        }
+        
+        // Admin ürün listesini render etme
+        function renderAdminProducts() {
+            adminProductList.innerHTML = '';
+            if (state.products.length === 0) {
+                adminProductList.innerHTML = '<p class="text-center text-gray-500 mt-4">Henüz ürün eklenmedi.</p>';
+                return;
+            }
+            
+            state.products.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'bg-gray-100 p-4 rounded-lg shadow-inner flex flex-col items-center text-center';
+                productDiv.innerHTML = `
+                    <img src="${product.imageUrl}" alt="${product.name}" class="w-24 h-24 object-cover rounded-md mb-2">
+                    <h4 class="font-semibold text-gray-800">${product.name}</h4>
+                    <p class="text-sm text-gray-600">${product.price.toFixed(2)} € / adet</p>
+                    <p class="text-xs text-gray-500">Kutu İçi: ${product.boxQuantity} adet</p>
+                    <div class="flex space-x-2 mt-4">
+                        <button class="edit-product-btn bg-blue-500 text-white text-xs py-1 px-3 rounded-full hover:bg-blue-600 transition duration-300" data-id="${product.id}">Düzenle</button>
+                        <button class="delete-product-btn bg-red-500 text-white text-xs py-1 px-3 rounded-full hover:bg-red-600 transition duration-300" data-id="${product.id}">Sil</button>
+                    </div>
+                `;
+                adminProductList.appendChild(productDiv);
+            });
+        }
+        
+        // Excel'e aktarma fonksiyonu
+        function exportToExcel(order) {
+            const header = "Siparis No,Kullanici,Urun Adi,Siparis Adedi,Birim Fiyat (€),Urun Toplam (€)\n";
+            let csvContent = header + order.items.map(item =>
+                `"${order.timestamp}","${order.username}","${item.urun_adi}",${item.siparis_adedi},${item.birim_fiyat},${item.urun_toplam}`
+            ).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Siparis_${order.username}_${new Date(order.timestamp).toISOString().slice(0, 10)}.xls`);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Proforma PDF oluşturma fonksiyonu
+        function generateProformaPDF(order) {
+            const itemsHtml = order.items.map(item => `
+                <tr class="border-b">
+                    <td class="p-2">${item.urun_adi}</td>
+                    <td class="p-2 text-center">${item.siparis_adedi}</td>
+                    <td class="p-2 text-right">${item.birim_fiyat} €</td>
+                    <td class="p-2 text-right">${item.urun_toplam} €</td>
+                </tr>
+            `).join('');
+
+            const proformaHtml = `
+                <div style="font-family: 'Inter', sans-serif; padding: 20px; max-width: 800px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+                    <h1 style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 20px;">PROFORMA FATURA</h1>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <div>
+                            <p><strong>Firma Adı:</strong> Gıda Dağıtım</p>
+                            <p><strong>Adres:</strong> Örnek Sokak, Örnek Mah., Ankara</p>
+                        </div>
+                        <div>
+                            <p><strong>Sipariş No:</strong> ${order.timestamp}</p>
+                            <p><strong>Tarih:</strong> ${new Date(order.timestamp).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                    <hr style="border: 1px dashed #ccc; margin: 20px 0;">
+                    <div>
+                        <p><strong>Müşteri Adı:</strong> ${order.username}</p>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr style="background-color: #f3f4f6;">
+                                <th class="p-2 text-left">Ürün Adı</th>
+                                <th class="p-2 text-center">Adet</th>
+                                <th class="p-2 text-right">Birim Fiyat</th>
+                                <th class="p-2 text-right">Toplam Fiyat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHtml}
+                        </tbody>
+                    </table>
+                    <div style="text-align: right; margin-top: 20px; font-size: 18px; font-weight: bold;">
+                        <p>Genel Toplam: ${order.grandTotal.toFixed(2)} €</p>
+                    </div>
+                </div>
+            `;
+            
+            const newWindow = window.open('', '_blank');
+            if (newWindow) {
+                newWindow.document.write('<!DOCTYPE html><html><head><title>Proforma Fatura</title></head><body>');
+                newWindow.document.write(proformaHtml);
+                newWindow.document.write('</body></html>');
+                newWindow.document.close();
+                newWindow.print();
+            } else {
+                openModal('errorModal');
+                document.getElementById('errorMessage').textContent = 'Proforma fatura penceresi açılamadı. Tarayıcı pop-up engelleyicisini kontrol edin.';
+            }
+        }
+
+        // Arayüzü kullanıcı durumuna göre güncelleme
+        function updateUI() {
+            if (state.currentUser) {
+                loginSection.style.display = 'none';
+                if (state.currentUser.role === 'admin') {
+                    appSection.style.display = 'none';
+                    adminSection.style.display = 'block';
+                    userWelcomeAdmin.textContent = `Hoş geldiniz, Yönetici (${state.currentUser.username})`;
+                    showAdminSection('orders');
+                } else {
+                    appSection.style.display = 'block';
+                    adminSection.style.display = 'none';
+                    userWelcome.textContent = `Hoş geldiniz, ${state.currentUser.username}`;
+                    renderProducts(state.products);
+                }
+                
+                // Admin butonu görünürlüğünü güncelle
+                if (state.currentUser.role === 'admin') {
+                    adminPanelBtn.style.display = 'inline-block';
+                } else {
+                    adminPanelBtn.style.display = 'none';
+                }
+            } else {
+                loginSection.style.display = 'block';
+                appSection.style.display = 'none';
+                adminSection.style.display = 'none';
+            }
+        }
+        
+        // Admin panelindeki görünümü değiştirme
+        function showAdminSection(section) {
+            adminOrdersSection.style.display = section === 'orders' ? 'block' : 'none';
+            adminProductsSection.style.display = section === 'products' ? 'block' : 'none';
+            
+            viewOrdersBtn.classList.remove('bg-indigo-600', 'text-white');
+            viewOrdersBtn.classList.add('bg-gray-200', 'text-gray-800');
+            viewProductsBtn.classList.remove('bg-indigo-600', 'text-white');
+            viewProductsBtn.classList.add('bg-gray-200', 'text-gray-800');
+            
+            if (section === 'orders') {
+                viewOrdersBtn.classList.remove('bg-gray-200', 'text-gray-800');
+                viewOrdersBtn.classList.add('bg-indigo-600', 'text-white');
+                renderAdminPanel();
+            } else {
+                viewProductsBtn.classList.remove('bg-gray-200', 'text-gray-800');
+                viewProductsBtn.classList.add('bg-indigo-600', 'text-white');
+                renderAdminProducts();
+            }
+        }
+        
+        // Olay dinleyicileri
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = e.target.username.value;
+            const password = e.target.password.value;
+            
+            const user = users[username];
+            if (user && user.password === password) {
+                state.currentUser = user;
+                updateUI();
+                openModal('successModal');
+                document.getElementById('successModalMessage').textContent = 'Başarıyla giriş yapıldı!';
+            } else {
+                openModal('errorModal');
+                document.getElementById('errorMessage').textContent = 'Kullanıcı adı veya şifre hatalı.';
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            state.currentUser = null;
+            updateUI();
+        });
+
+        document.getElementById('logoutBtnAdmin').addEventListener('click', () => {
+            state.currentUser = null;
+            updateUI();
+        });
+        
+        adminPanelBtn.addEventListener('click', () => {
+            appSection.style.display = 'none';
+            adminSection.style.display = 'block';
+            showAdminSection('orders');
+        });
+
+        homeBtnAdmin.addEventListener('click', () => {
+            adminSection.style.display = 'none';
+            appSection.style.display = 'block';
+            renderProducts(state.products);
+        });
+
+        viewOrdersBtn.addEventListener('click', () => {
+            showAdminSection('orders');
+        });
+
+        viewProductsBtn.addEventListener('click', () => {
+            showAdminSection('products');
+        });
+
+        createUserBtn.addEventListener('click', () => {
+            openModal('createUserModal');
+        });
+
+        addProductBtn.addEventListener('click', () => {
+            openModal('addProductModal');
+        });
+        
+        cancelCreateUserBtn.addEventListener('click', () => {
+            closeModal('createUserModal');
+            createUserForm.reset();
+        });
+
+        cancelAddProductBtn.addEventListener('click', () => {
+            closeModal('addProductModal');
+            addProductForm.reset();
+        });
+
+        addProductForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('newProductName').value;
+            const price = parseFloat(document.getElementById('newProductPrice').value);
+            const boxQuantity = parseInt(document.getElementById('newProductBoxQuantity').value, 10);
+            const imageFile = document.getElementById('newProductImageFile').files[0];
+
+            if (isNaN(price) || price <= 0) {
+                openModal('errorModal');
+                document.getElementById('errorMessage').textContent = 'Geçerli bir fiyat girin.';
+                return;
+            }
+            if (isNaN(boxQuantity) || boxQuantity <= 0) {
+                openModal('errorModal');
+                document.getElementById('errorMessage').textContent = 'Geçerli bir kutu içi adet bilgisi girin.';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const newProduct = {
+                    id: Date.now(), 
+                    name: name,
+                    imageUrl: e.target.result, 
+                    price: price,
+                    sales: 0, 
+                    boxQuantity: boxQuantity
+                };
+
+                state.products.push(newProduct);
+                
+                openModal('successModal');
+                document.getElementById('successModalMessage').textContent = `${name} adlı ürün başarıyla eklendi!`;
+                closeModal('addProductModal');
+                addProductForm.reset();
+                
+                renderProducts(state.products);
+                updateGrandTotal();
+                renderAdminProducts();
+            };
+            if (imageFile) {
+                 reader.readAsDataURL(imageFile);
+            } else {
+                 openModal('errorModal');
+                 document.getElementById('errorMessage').textContent = 'Lütfen bir resim dosyası seçin.';
+            }
+        });
+
+        createUserForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newUsername = e.target.username.value;
+            const newPassword = e.target.password.value;
+            
+            if (users[newUsername]) {
+                openModal('errorModal');
+                document.getElementById('errorMessage').textContent = 'Bu kullanıcı adı zaten mevcut. Lütfen başka bir kullanıcı adı seçin.';
+                return;
+            }
+
+            users[newUsername] = {
+                username: newUsername,
+                password: newPassword,
+                role: 'user'
+            };
+            
+            openModal('successModal');
+            document.getElementById('successModalMessage').textContent = `Yeni kullanıcı oluşturuldu! Kullanıcı Adı: "${newUsername}" ve Şifre: "${newPassword}"`;
+            closeModal('createUserModal');
+            createUserForm.reset();
+        });
+
+        sortSelect.addEventListener('change', (e) => {
+            sortProducts(e.target.value);
+        });
+        
+        adminOrderList.addEventListener('click', (e) => {
+            const orderDiv = e.target.closest('.bg-gray-100.p-4');
+            if (!orderDiv) return;
+
+            const orderIndex = Array.from(adminOrderList.children).indexOf(orderDiv);
+            const order = state.orders[orderIndex];
+
+            if (e.target.classList.contains('export-excel-btn')) {
+                exportToExcel(order);
+            } else if (e.target.classList.contains('generate-proforma-btn')) {
+                generateProformaPDF(order);
+            }
+        });
+        
+        // Ürün silme ve düzenleme
+        adminProductsSection.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button) return;
+            const productId = parseInt(button.dataset.id, 10);
+            const productIndex = state.products.findIndex(p => p.id === productId);
+
+            if (button.classList.contains('delete-product-btn')) {
+                confirmMessage.textContent = `${state.products[productIndex].name} ürününü silmek istediğinizden emin misiniz?`;
+                openModal('confirmModal');
+                confirmActionBtn.onclick = () => {
+                    if (productIndex !== -1) {
+                        state.products.splice(productIndex, 1);
+                        renderAdminProducts();
+                        renderProducts();
+                        closeModal('confirmModal');
+                        openModal('successModal');
+                        document.getElementById('successModalMessage').textContent = 'Ürün başarıyla silindi!';
+                    }
+                };
+            } else if (button.classList.contains('edit-product-btn')) {
+                const productToEdit = state.products[productIndex];
+                editProductIdInput.value = productToEdit.id;
+                editProductNameInput.value = productToEdit.name;
+                editProductPriceInput.value = productToEdit.price;
+                editProductBoxQuantityInput.value = productToEdit.boxQuantity;
+                editProductImagePreview.src = productToEdit.imageUrl;
+                openModal('editProductModal');
+            }
+        });
+
+        editProductForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = parseInt(editProductIdInput.value, 10);
+            const productIndex = state.products.findIndex(p => p.id === id);
+            
+            if (productIndex !== -1) {
+                const updatedProduct = state.products[productIndex];
+                updatedProduct.name = editProductNameInput.value;
+                updatedProduct.price = parseFloat(editProductPriceInput.value);
+                updatedProduct.boxQuantity = parseInt(editProductBoxQuantityInput.value, 10);
+                
+                const newImageFile = editProductImageFile.files[0];
+                if (newImageFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        updatedProduct.imageUrl = e.target.result;
+                        closeModal('editProductModal');
+                        renderAdminProducts();
+                        renderProducts();
+                        openModal('successModal');
+                        document.getElementById('successModalMessage').textContent = 'Ürün başarıyla güncellendi!';
+                    };
+                    reader.readAsDataURL(newImageFile);
+                } else {
+                    closeModal('editProductModal');
+                    renderAdminProducts();
+                    renderProducts();
+                    openModal('successModal');
+                    document.getElementById('successModalMessage').textContent = 'Ürün başarıyla güncellendi!';
+                }
+            }
+        });
+
+        sendOrderBtn.addEventListener('click', () => {
+            const orderData = [];
+            let hasValidOrder = false;
+
+            state.products.forEach(product => {
+                const qtySelect = document.getElementById(`qty-${product.id}`);
+                const quantity = parseInt(qtySelect.value, 10) || 0;
+
+                if (quantity > 0) {
+                    orderData.push({
+                        urun_adi: product.name,
+                        siparis_adedi: quantity,
+                        birim_fiyat: product.price,
+                        urun_toplam: (quantity * product.price).toFixed(2)
+                    });
+                    hasValidOrder = true;
+                }
+            });
+
+            if (hasValidOrder) {
+                sendOrderBtn.textContent = 'Gönderiliyor...';
+                sendOrderBtn.disabled = true;
+
+                const newOrder = {
+                    username: state.currentUser.username,
+                    items: orderData,
+                    grandTotal: orderData.reduce((acc, item) => acc + parseFloat(item.urun_toplam), 0),
+                    timestamp: Date.now()
+                };
+                
+                state.orders.push(newOrder);
+                
+                openModal('successModal');
+                document.getElementById('successModalMessage').textContent = 'Siparişiniz başarıyla alındı!';
+                
+                sendOrderBtn.textContent = 'Siparişi Oluştur ve Gönder';
+                sendOrderBtn.disabled = false;
+                
+            } else {
+                openModal('errorModal');
+                document.getElementById('errorMessage').textContent = 'Sipariş listesinde ürün bulunmamaktadır.';
+            }
+        });
+        
+        productList.addEventListener('click', (e) => {
+            const img = e.target.closest('img');
+            if (img && img.dataset.largeUrl) {
+                openModal('imageModal');
+                modalImage.src = img.dataset.largeUrl;
+            }
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => closeModal('imageModal'));
+        document.getElementById('closeSuccessModalBtn').addEventListener('click', () => {
+            closeModal('successModal');
+            if (state.currentUser && state.currentUser.role === 'user') {
+                state.products.forEach(product => {
+                    const qtySelect = document.getElementById(`qty-${product.id}`);
+                    if (qtySelect) qtySelect.value = 0;
+                });
+                updateGrandTotal();
+            }
+        });
+        document.getElementById('closeErrorModalBtn').addEventListener('click', () => closeModal('errorModal'));
+        document.getElementById('cancelEditProductBtn').addEventListener('click', () => closeModal('editProductModal'));
+        document.getElementById('cancelConfirmBtn').addEventListener('click', () => closeModal('confirmModal'));
+        imageModal.addEventListener('click', (e) => { if (e.target.id === 'imageModal') closeModal('imageModal'); });
+        successModal.addEventListener('click', (e) => { if (e.target.id === 'successModal') closeModal('successModal'); });
+        errorModal.addEventListener('click', (e) => { if (e.target.id === 'errorModal') closeModal('errorModal'); });
+        createUserModal.addEventListener('click', (e) => { if (e.target.id === 'createUserModal') closeModal('createUserModal'); });
+        addProductModal.addEventListener('click', (e) => { if (e.target.id === 'addProductModal') closeModal('addProductModal'); });
+        editProductModal.addEventListener('click', (e) => { if (e.target.id === 'editProductModal') closeModal('editProductModal'); });
+        confirmModal.addEventListener('click', (e) => { if (e.target.id === 'confirmModal') closeModal('confirmModal'); });
+        
+        updateUI();
+
+    </script>
+</body>
+</html>
