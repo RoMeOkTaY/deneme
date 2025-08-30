@@ -254,35 +254,73 @@
 
 
     <script type="text/javascript">
-        // Firebase'in kaldırıldığına dair bilgilendirme.
-        // Bu uygulama, tüm veriyi doğrudan tarayıcı belleğinde (in-memory) saklar.
-        // Bu nedenle sayfa yenilendiğinde tüm veriler (kullanıcılar, ürünler, siparişler) kaybolacaktır.
-
-        // Kullanıcılar ve rolleri
-        const users = {
+        // Uygulamanın varsayılan başlangıç verileri (localStorage boşsa kullanılacak)
+        const DEFAULT_USERS = {
             'admin': { username: 'admin', password: '123', role: 'admin' },
             'deneme': { username: 'deneme', password: '123', role: 'user' },
         };
-
-        const state = {
-            products: [
-                { id: 1, name: "Zeytinyağı (5L)", imageUrl: "https://placehold.co/400x300/a3e635/000?text=Zeytinyağı", price: 25.00, sales: 150, boxQuantity: 1 },
-                { id: 2, name: "Un (25kg)", imageUrl: "https://placehold.co/400x300/fde047/000?text=Un", price: 12.50, sales: 200, boxQuantity: 1 },
-                { id: 3, name: "Tuz (5kg)", imageUrl: "https://placehold.co/400x300/6ee7b7/000?text=Tuz", price: 3.75, sales: 500, boxQuantity: 10 },
-                { id: 4, name: "Şeker (50kg)", imageUrl: "https://placehold.co/400x300/d8b4fe/000?text=Şeker", price: 65.00, sales: 80, boxQuantity: 1 },
-                { id: 5, name: "Pirinç (10kg)", imageUrl: "https://placehold.co/400x300/94a3b8/000?text=Pirinç", price: 9.20, sales: 300, boxQuantity: 5 },
-                { id: 6, name: "Ayçiçek Yağı (18L)", imageUrl: "https://placehold.co/400x300/fca5a5/000?text=Ayçiçek+Yağı", price: 32.00, sales: 250, boxQuantity: 1 },
-                { id: 7, name: "Domates Salçası (5kg)", imageUrl: "https://placehold.co/400x300/fb923c/000?text=Domates+Salçası", price: 18.50, sales: 180, boxQuantity: 1 },
-                { id: 8, name: "Makarna (500g)", imageUrl: "https://placehold.co/400x300/c4b5fd/000?text=Makarna", price: 1.25, sales: 450, boxQuantity: 24 },
-                { id: 9, name: "Kuru Fasulye (1kg)", imageUrl: "https://placehold.co/400x300/a78bfa/000?text=Fasulye", price: 4.50, sales: 350, boxQuantity: 12 },
-                { id: 10, name: "Siyah Zeytin (1kg)", imageUrl: "https://placehold.co/400x300/22c55e/000?text=Siyah+Zeytin", price: 7.50, sales: 220, boxQuantity: 12 },
-                { id: 11, name: "Nohut (1kg)", imageUrl: "https://placehold.co/400x300/3b82f6/000?text=Nohut", price: 5.50, sales: 280, boxQuantity: 12 },
-                { id: 12, name: "Mercimek (1kg)", imageUrl: "https://placehold.co/400x300/ef4444/000?text=Mercimek", price: 4.00, sales: 310, boxQuantity: 12 },
-            ],
-            orders: [], // Siparişler geçici olarak burada tutulur
+        const DEFAULT_PRODUCTS = [
+            { id: 1, name: "Zeytinyağı (5L)", imageUrl: "https://placehold.co/400x300/a3e635/000?text=Zeytinyağı", price: 25.00, sales: 150, boxQuantity: 1 },
+            { id: 2, name: "Un (25kg)", imageUrl: "https://placehold.co/400x300/fde047/000?text=Un", price: 12.50, sales: 200, boxQuantity: 1 },
+            { id: 3, name: "Tuz (5kg)", imageUrl: "https://placehold.co/400x300/6ee7b7/000?text=Tuz", price: 3.75, sales: 500, boxQuantity: 10 },
+            { id: 4, name: "Şeker (50kg)", imageUrl: "https://placehold.co/400x300/d8b4fe/000?text=Şeker", price: 65.00, sales: 80, boxQuantity: 1 },
+            { id: 5, name: "Pirinç (10kg)", imageUrl: "https://placehold.co/400x300/94a3b8/000?text=Pirinç", price: 9.20, sales: 300, boxQuantity: 5 },
+            { id: 6, name: "Ayçiçek Yağı (18L)", imageUrl: "https://placehold.co/400x300/fca5a5/000?text=Ayçiçek+Yağı", price: 32.00, sales: 250, boxQuantity: 1 },
+            { id: 7, name: "Domates Salçası (5kg)", imageUrl: "https://placehold.co/400x300/fb923c/000?text=Domates+Salçası", price: 18.50, sales: 180, boxQuantity: 1 },
+            { id: 8, name: "Makarna (500g)", imageUrl: "https://placehold.co/400x300/c4b5fd/000?text=Makarna", price: 1.25, sales: 450, boxQuantity: 24 },
+            { id: 9, name: "Kuru Fasulye (1kg)", imageUrl: "https://placehold.co/400x300/a78bfa/000?text=Fasulye", price: 4.50, sales: 350, boxQuantity: 12 },
+            { id: 10, name: "Siyah Zeytin (1kg)", imageUrl: "https://placehold.co/400x300/22c55e/000?text=Siyah+Zeytin", price: 7.50, sales: 220, boxQuantity: 12 },
+            { id: 11, name: "Nohut (1kg)", imageUrl: "https://placehold.co/400x300/3b82f6/000?text=Nohut", price: 5.50, sales: 280, boxQuantity: 12 },
+            { id: 12, name: "Mercimek (1kg)", imageUrl: "https://placehold.co/400x300/ef4444/000?text=Mercimek", price: 4.00, sales: 310, boxQuantity: 12 },
+        ];
+        
+        let users = { ...DEFAULT_USERS };
+        let state = {
+            products: [...DEFAULT_PRODUCTS],
+            orders: [], 
             currentUser: null,
             sortKey: 'default'
         };
+
+        // Veriyi localStorage'a kaydetme
+        function saveData() {
+            try {
+                localStorage.setItem('foodDeliveryApp_users', JSON.stringify(users));
+                localStorage.setItem('foodDeliveryApp_state', JSON.stringify({
+                    products: state.products,
+                    orders: state.orders
+                }));
+            } catch (error) {
+                console.error("localStorage'a veri kaydedilirken hata oluştu:", error);
+            }
+        }
+
+        // Veriyi localStorage'dan yükleme
+        function loadData() {
+            try {
+                const storedUsers = localStorage.getItem('foodDeliveryApp_users');
+                const storedState = localStorage.getItem('foodDeliveryApp_state');
+
+                if (storedUsers) {
+                    users = JSON.parse(storedUsers);
+                }
+
+                if (storedState) {
+                    const loadedState = JSON.parse(storedState);
+                    state.products = loadedState.products || [...DEFAULT_PRODUCTS];
+                    state.orders = loadedState.orders || [];
+                } else {
+                    saveData(); // İlk kez açılıyorsa varsayılan verileri kaydet
+                }
+
+            } catch (error) {
+                console.error("localStorage'dan veri yüklenirken hata oluştu. Varsayılan veriler kullanılıyor.", error);
+                // Hata durumunda varsayılan verileri kullan
+                users = { ...DEFAULT_USERS };
+                state.products = [...DEFAULT_PRODUCTS];
+                state.orders = [];
+            }
+        }
 
         // Elementleri çekme
         const loginSection = document.getElementById('loginSection');
@@ -354,8 +392,10 @@
             let total = 0;
             state.products.forEach(product => {
                 const qtySelect = document.getElementById(`qty-${product.id}`);
-                const quantity = parseInt(qtySelect.value, 10) || 0;
-                total += product.price * quantity;
+                if (qtySelect) {
+                     const quantity = parseInt(qtySelect.value, 10) || 0;
+                     total += product.price * quantity;
+                }
             });
             grandTotalElement.textContent = `${total.toFixed(2)} €`;
         }
@@ -706,6 +746,7 @@
                 };
 
                 state.products.push(newProduct);
+                saveData();
                 
                 openModal('successModal');
                 document.getElementById('successModalMessage').textContent = `${name} adlı ürün başarıyla eklendi!`;
@@ -740,6 +781,7 @@
                 password: newPassword,
                 role: 'user'
             };
+            saveData();
             
             openModal('successModal');
             document.getElementById('successModalMessage').textContent = `Yeni kullanıcı oluşturuldu! Kullanıcı Adı: "${newUsername}" ve Şifre: "${newPassword}"`;
@@ -778,6 +820,7 @@
                 confirmActionBtn.onclick = () => {
                     if (productIndex !== -1) {
                         state.products.splice(productIndex, 1);
+                        saveData();
                         renderAdminProducts();
                         renderProducts();
                         closeModal('confirmModal');
@@ -812,6 +855,7 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         updatedProduct.imageUrl = e.target.result;
+                        saveData();
                         closeModal('editProductModal');
                         renderAdminProducts();
                         renderProducts();
@@ -820,6 +864,7 @@
                     };
                     reader.readAsDataURL(newImageFile);
                 } else {
+                    saveData();
                     closeModal('editProductModal');
                     renderAdminProducts();
                     renderProducts();
@@ -860,6 +905,7 @@
                 };
                 
                 state.orders.push(newOrder);
+                saveData();
                 
                 openModal('successModal');
                 document.getElementById('successModalMessage').textContent = 'Siparişiniz başarıyla alındı!';
@@ -903,6 +949,7 @@
         editProductModal.addEventListener('click', (e) => { if (e.target.id === 'editProductModal') closeModal('editProductModal'); });
         confirmModal.addEventListener('click', (e) => { if (e.target.id === 'confirmModal') closeModal('confirmModal'); });
         
+        loadData();
         updateUI();
 
     </script>
